@@ -51,6 +51,7 @@ const buildInitialState = () => ({
   format: {
     spacing: 5,               // 1-15
     fontSize: 13,             // px, 10-18
+    contentPaddingH: 14,      // px, left/right padding inside columns
     documentSize: 'a4',       // 'a4' | 'letter'
     showListLabels: false,
     font: 'Inter',
@@ -396,6 +397,12 @@ export function ResumeProvider({ children }) {
     const size = state.format.fontSize ?? 13;
     document.documentElement.style.setProperty('--font-size-base', `${size}px`);
   }, [state.format.fontSize]);
+
+  // Apply content horizontal padding
+  useEffect(() => {
+    const p = state.format.contentPaddingH ?? 14;
+    document.documentElement.style.setProperty('--content-padding-h', `${p}px`);
+  }, [state.format.contentPaddingH]);
 
   // Apply canvas background via CSS var (avoids React inline-style override)
   useEffect(() => {

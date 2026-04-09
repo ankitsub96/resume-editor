@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/resume-editor/',
+  base: "/resume-editor/",
   server: {
     port: 5179,
   },

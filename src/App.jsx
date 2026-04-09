@@ -4,6 +4,7 @@ import Resume from './components/Resume.jsx';
 import PDFPreviewModal from './components/PDFPreviewModal.jsx';
 import ThemePanel from './components/panels/ThemePanel.jsx';
 import FormatPanel from './components/panels/FormatPanel.jsx';
+import { applyConfigOnStartup } from './utils/applyConfig.js';
 import './App.css';
 
 // Minimum window width to pin sidebars (canvas ~794 + 240 left + 240 right + margins)
@@ -12,6 +13,10 @@ const PIN_THRESHOLD = 1320;
 export default function App() {
   const [showPDFPreview, setShowPDFPreview] = useState(false);
   const [pinned, setPinned] = useState(() => window.innerWidth >= PIN_THRESHOLD);
+
+  useEffect(() => {
+    applyConfigOnStartup();
+  }, []);
 
   useEffect(() => {
     function onResize() { setPinned(window.innerWidth >= PIN_THRESHOLD); }
