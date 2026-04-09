@@ -17,8 +17,8 @@ function prepareCanvas(canvas) {
     '.section-drag-handle, .photo-remove-btn, .drag-dot, .item-drag-handle, .bullet-drag, ' +
     '.skill-remove, .skill-add-input, .column-divider'
   );
-  const prevVisibility = [];
-  editEls.forEach(el => { prevVisibility.push(el.style.visibility); el.style.visibility = 'hidden'; });
+  const prevDisplay = [];
+  editEls.forEach(el => { prevDisplay.push(el.style.display); el.style.display = 'none'; });
 
   const photoEl = canvas.querySelector('.header-photo');
   const hasRealPhoto = !!photoEl?.querySelector('img');
@@ -29,7 +29,7 @@ function prepareCanvas(canvas) {
   }
 
   return () => {
-    editEls.forEach((el, i) => { el.style.visibility = prevVisibility[i]; });
+    editEls.forEach((el, i) => { el.style.display = prevDisplay[i]; });
     if (photoEl && prevPhotoDisplay !== null) photoEl.style.display = prevPhotoDisplay;
   };
 }
@@ -74,7 +74,7 @@ async function buildPDF(documentSize, keywords = '', background = '#ffffff') {
       pdf.addImage(imgData, 'JPEG', 0, -offset, imgW, imgH);
       remaining -= pageH;
       offset += pageH;
-      if (remaining > 0) pdf.addPage();
+      if (remaining > 2) pdf.addPage(); // >2mm threshold avoids blank pages from rounding
     }
 
     if (keywords && keywords.trim()) {

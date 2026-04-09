@@ -95,6 +95,39 @@ export const initialResume = {
       ],
     },
     {
+      id: "work",
+      type: "work",
+      title: "Work Experience",
+      visible: true,
+      column: "left",
+      items: [
+        {
+          id: "work-1",
+          jobTitle: "Senior Full Stack Developer",
+          company: "Tagbin Services Pvt Ltd.",
+          period: "01/2025 – Present",
+          location: "",
+          bullets: [
+            "Architected and scaled a multi-tenant collaboration and chat SaaS platform supporting 50k+ DAUs, with real-time chat, meetings, and notifications, built on AWS (Lambda, AppSync, S3, Chime, Transcribe) using an event-driven microservices architecture (RabbitMQ).",
+            "Implemented AI-powered collaboration features including meeting transcription, summaries, action items, and intelligent search, optimizing low-latency workflows with Redis caching and Elasticsearch.",
+            "Built enterprise workforce management and BI systems with real-time attendance, scheduling, dashboards, and a custom analytics engine, focusing on performance optimization, scalability, and data modeling.",
+          ],
+        },
+        {
+          id: "work-2",
+          jobTitle: "Senior Full Stack Developer",
+          company: "Imarticus Learning",
+          period: "07/2021 – 01/2025",
+          location: "",
+          bullets: [
+            "Owned end-to-end development of core LMS features including bulk user onboarding, course enrollment automation, and a multi-layered course architecture, while designing RBAC and fine-grained content access control to support hybrid education models and complex role hierarchies.",
+            "Built and scaled a multi-gateway payments platform supporting online, offline, and device-based payments, with reconciliation, reporting, RBAC-controlled access, and event-driven notifications, handling ₹30–40 Cr in annual collections.",
+            "Delivered and maintained key platform integrations such as Zoom-based live lectures with automated recording processing, while mentoring junior developers, conducting code reviews, and upholding high engineering standards.",
+          ],
+        },
+      ],
+    },
+    {
       id: "skills",
       type: "skills",
       title: "Core Skills",

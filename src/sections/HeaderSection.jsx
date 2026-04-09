@@ -35,44 +35,16 @@ export default function HeaderSection() {
 
   return (
     <header className="resume-header">
-      <div className="header-left">
-        <EditableText tag="h1" className="header-name" value={header.name}
-          onChange={(v) => updateHeader('name', v)} placeholder="Your Name" />
-        {showTitle && (
-          <EditableText tag="p" className="header-title" value={header.title}
-            onChange={(v) => updateHeader('title', v)} placeholder="Job Title" />
-        )}
-        {showSummary && (
-          <EditableText tag="p" className="header-summary" value={header.summary}
-            onChange={(v) => updateHeader('summary', v)} placeholder="Professional summary…" multiLine />
-        )}
-      </div>
 
-      <div className="header-right">
-        {showPhoto && (
-          <div className="header-photo-wrap">
-            <div className="header-photo" onClick={() => photoRef.current?.click()}>
-              {header.photo
-                ? <img src={header.photo} alt="Profile" />
-                : <span className="photo-placeholder">+<br/>Photo</span>}
-              <input ref={photoRef} type="file" accept="image/*" onChange={handlePhotoChange} style={{ display: 'none' }} />
-            </div>
-            {header.photo && (
-              <button
-                className="photo-remove-btn"
-                onClick={() => updateHeader('photo', null)}
-                title="Remove photo"
-              >×</button>
-            )}
-          </div>
-        )}
+      {/* Left: contacts */}
+      <div className="header-left">
         <div className="header-contacts">
           {header.contacts.map((c) => {
             const inner = (
               <>
+                <span className="contact-icon">{ICONS[c.icon]}</span>
                 <EditableText tag="span" className="contact-label" value={c.label}
                   onChange={(v) => updateContact(c.id, 'label', v)} placeholder="Contact" />
-                <span className="contact-icon">{ICONS[c.icon]}</span>
               </>
             );
             return c.href ? (
@@ -86,6 +58,38 @@ export default function HeaderSection() {
           })}
         </div>
       </div>
+
+      {/* Center: name, title, summary */}
+      <div className="header-center-text">
+        <EditableText tag="h1" className="header-name" value={header.name}
+          onChange={(v) => updateHeader('name', v)} placeholder="Your Name" />
+        {showTitle && (
+          <EditableText tag="p" className="header-title" value={header.title}
+            onChange={(v) => updateHeader('title', v)} placeholder="Job Title" />
+        )}
+        {showSummary && (
+          <EditableText tag="p" className="header-summary" value={header.summary}
+            onChange={(v) => updateHeader('summary', v)} placeholder="Professional summary…" multiLine />
+        )}
+      </div>
+
+      {/* Right: photo */}
+      {showPhoto && (
+        <div className="header-right">
+          <div className="header-photo-wrap">
+            <div className="header-photo" onClick={() => photoRef.current?.click()}>
+              {header.photo
+                ? <img src={header.photo} alt="Profile" />
+                : <span className="photo-placeholder">+<br/>Photo</span>}
+              <input ref={photoRef} type="file" accept="image/*" onChange={handlePhotoChange} style={{ display: 'none' }} />
+            </div>
+            {header.photo && (
+              <button className="photo-remove-btn" onClick={() => updateHeader('photo', null)} title="Remove photo">×</button>
+            )}
+          </div>
+        </div>
+      )}
+
     </header>
   );
 }

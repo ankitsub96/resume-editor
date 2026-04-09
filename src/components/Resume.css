@@ -11,7 +11,6 @@
 .resume-canvas {
   background: var(--canvas-bg, #fff);
   box-shadow: 0 0 24px rgba(0,0,0,0.18);
-  min-height: 100%;
   flex-shrink: 0;
   font-family: var(--font-resume);
   font-size: 13px;
@@ -110,20 +109,25 @@
   position: relative;
 }
 
-/* Drag handle — always visible, highlights on hover */
+/* Drag handle — floats above section, doesn't affect layout */
 .section-drag-handle {
-  height: 18px;
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  height: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: grab;
-  opacity: 0.35;
+  opacity: 0;
   transition: opacity 0.15s, background 0.15s;
   user-select: none;
   border-radius: 3px;
+  z-index: 5;
 }
 .sortable-section:hover .section-drag-handle { opacity: 1; }
-.section-drag-handle:hover { opacity: 1; background: rgba(90,122,74,0.08); }
+.section-drag-handle:hover { background: rgba(90,122,74,0.08); }
 .section-drag-handle:active { cursor: grabbing; }
 
 .section-drag-dots {
