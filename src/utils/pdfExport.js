@@ -39,30 +39,31 @@ function prepareCanvas(canvas) {
  * to PDF mm coordinates, and register jsPDF link annotations.
  */
 function addLinkAnnotations(pdf, canvasEl, pageW, pageH) {
-  const links = canvasEl.querySelectorAll('a[href]');
-  if (!links.length) return;
-
   const canvasRect = canvasEl.getBoundingClientRect();
   const mmPerPx = pageW / canvasRect.width;
 
-  links.forEach(link => {
-    const href = link.href;
+  function annotate(el, href) {
     if (!href || href.startsWith('javascript:')) return;
-
-    const rect = link.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
     const xMm = (rect.left - canvasRect.left) * mmPerPx;
     const yMm = (rect.top  - canvasRect.top)  * mmPerPx;
     const wMm = rect.width  * mmPerPx;
     const hMm = rect.height * mmPerPx;
-
-    // Handle multi-page: determine which page this link falls on
     const pageIndex = Math.floor(yMm / pageH);
     const yOnPage   = yMm - pageIndex * pageH;
-
     if (pageIndex >= 0 && pageIndex < pdf.getNumberOfPages()) {
       pdf.setPage(pageIndex + 1);
       pdf.link(xMm, yOnPage, wMm, hMm, { url: href });
     }
+  }
+
+  // Annotate every <a href> element
+  canvasEl.querySelectorAll('a[href]').forEach(link => annotate(link, link.href));
+
+  // Also annotate the contact label text sitting next to each icon link
+  canvasEl.querySelectorAll('a.contact-icon[href]').forEach(iconLink => {
+    const label = iconLink.parentElement?.querySelector('.contact-label');
+    if (label) annotate(label, iconLink.href);
   });
 }
 
