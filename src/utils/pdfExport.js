@@ -34,6 +34,38 @@ function prepareCanvas(canvas) {
   };
 }
 
+/**
+ * Walk all <a href> elements in the canvas DOM, convert their bounding boxes
+ * to PDF mm coordinates, and register jsPDF link annotations.
+ */
+function addLinkAnnotations(pdf, canvasEl, pageW, pageH) {
+  const links = canvasEl.querySelectorAll('a[href]');
+  if (!links.length) return;
+
+  const canvasRect = canvasEl.getBoundingClientRect();
+  const mmPerPx = pageW / canvasRect.width;
+
+  links.forEach(link => {
+    const href = link.href;
+    if (!href || href.startsWith('javascript:')) return;
+
+    const rect = link.getBoundingClientRect();
+    const xMm = (rect.left - canvasRect.left) * mmPerPx;
+    const yMm = (rect.top  - canvasRect.top)  * mmPerPx;
+    const wMm = rect.width  * mmPerPx;
+    const hMm = rect.height * mmPerPx;
+
+    // Handle multi-page: determine which page this link falls on
+    const pageIndex = Math.floor(yMm / pageH);
+    const yOnPage   = yMm - pageIndex * pageH;
+
+    if (pageIndex >= 0 && pageIndex < pdf.getNumberOfPages()) {
+      pdf.setPage(pageIndex + 1);
+      pdf.link(xMm, yOnPage, wMm, hMm, { url: href });
+    }
+  });
+}
+
 async function buildPDF(documentSize, keywords = '', background = '#ffffff') {
   const el = document.getElementById('resume-canvas');
   if (!el) return null;
@@ -79,6 +111,9 @@ async function buildPDF(documentSize, keywords = '', background = '#ffffff') {
       offset += pageH;
       if (remaining > 2) pdf.addPage(); // >2mm threshold avoids blank pages from rounding
     }
+
+    // Add clickable link annotations over the image
+    addLinkAnnotations(pdf, el, pageW, pageH);
 
     if (keywords && keywords.trim()) {
       pdf.setProperties({ keywords: keywords.trim() });
