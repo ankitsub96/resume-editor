@@ -1,0 +1,169 @@
+.resume-wrapper {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+  background: #d8d8d8;
+}
+
+.resume-canvas {
+  background: var(--canvas-bg, #fff);
+  box-shadow: 0 0 24px rgba(0,0,0,0.18);
+  min-height: 100%;
+  flex-shrink: 0;
+  font-family: var(--font-resume);
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Two-column body — flex so divider sits between columns */
+.resume-body.two-column-grid {
+  display: flex;
+  position: relative;
+}
+
+.resume-column {
+  padding: 16px 14px;
+}
+
+.column-left {
+  width: var(--left-col);
+  flex-shrink: 0;
+}
+
+.column-right {
+  flex: 1;
+}
+
+/* Drop target highlight */
+.drop-over {
+  background: rgba(90,122,74,0.06) !important;
+  outline: 2px dashed var(--primary);
+  outline-offset: -2px;
+}
+
+/* Draggable section wrapper */
+.draggable-section {
+  position: relative;
+}
+
+
+.is-dragging { opacity: 0.4; }
+
+/* Column divider — draggable resize handle */
+.column-divider {
+  width: 10px;
+  flex-shrink: 0;
+  position: relative;
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.column-divider:hover .divider-line { background: var(--primary); opacity: 0.5; }
+.column-divider:hover .divider-swap-btn { opacity: 1; }
+
+.divider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: #e0e0e0;
+  transition: background 0.15s, opacity 0.15s;
+  pointer-events: none;
+}
+
+.divider-swap-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.15s;
+  cursor: pointer;
+  border: none;
+  z-index: 11;
+  line-height: 1;
+}
+
+.divider-swap-btn:hover { background: var(--primary-dark); }
+
+/* Sortable section */
+.sortable-section {
+  position: relative;
+}
+
+/* Drag handle — always visible, highlights on hover */
+.section-drag-handle {
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  opacity: 0.35;
+  transition: opacity 0.15s, background 0.15s;
+  user-select: none;
+  border-radius: 3px;
+}
+.sortable-section:hover .section-drag-handle { opacity: 1; }
+.section-drag-handle:hover { opacity: 1; background: rgba(90,122,74,0.08); }
+.section-drag-handle:active { cursor: grabbing; }
+
+.section-drag-dots {
+  font-size: 0.9rem;
+  color: #888;
+  letter-spacing: 3px;
+}
+
+/* DragOverlay ghost */
+.section-ghost {
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  cursor: grabbing;
+  white-space: nowrap;
+}
+
+.section-ghost-icon { font-size: 1rem; }
+
+/* One-column layout */
+.resume-body.one-column {
+  padding: 16px 24px;
+}
+
+/* Placeholder hint */
+[contenteditable][data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: #ccc;
+  pointer-events: none;
+}
+
+@media print {
+  .resume-wrapper { background: none; padding: 0; }
+  .resume-canvas { box-shadow: none; }
+  .section-drag-handle, .column-divider { display: none !important; }
+}

@@ -1,0 +1,63 @@
+.skills-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.drag-dot {
+  font-size: 0.7rem;
+  color: var(--chip-text, #fff);
+  opacity: 0.5;
+  cursor: grab;
+  line-height: 1;
+  user-select: none;
+  transition: opacity 0.15s;
+}
+.drag-dot:hover { opacity: 1; }
+.drag-dot:active { cursor: grabbing; opacity: 1; }
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--primary);
+  color: var(--chip-text, #fff);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.skill-chip:hover .skill-remove { opacity: 1; }
+
+.skill-remove {
+  opacity: 0;
+  transition: opacity 0.15s;
+  font-size: 0.85rem;
+  color: var(--chip-text, #fff);
+  opacity: 0.7;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.skill-remove:hover { opacity: 1; }
+
+.skill-add-input {
+  border: none;
+  border-bottom: 1px dashed #ccc;
+  outline: none;
+  font-size: 0.7rem;
+  color: #888;
+  background: transparent;
+  padding: 2px 4px;
+  width: 90px;
+}
+
+.skill-add-input::placeholder { color: #bbb; }
+.skill-add-input:focus { border-bottom-color: var(--primary); color: #333; }

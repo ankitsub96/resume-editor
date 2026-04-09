@@ -1,0 +1,60 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Theme colors — updated by JS on theme change */
+  --primary: #5a7a4a;
+  --primary-dark: #3d5533;
+  --accent: #7a9a6a;
+  --sidebar-bg: #2d3d24;
+  --sidebar-text: #e8f0e0;
+  --text-light: #f0f4ec;
+
+  /* Document dimensions */
+  --canvas-width: 794px;
+  --left-col: 58%;
+  --right-col: 42%;
+
+  /* Spacing (driven by format.spacing 1-10) */
+  --section-gap: 1rem;
+  --item-gap: 0.6rem;
+  --line-height: 1.5;
+
+  /* UI shell */
+  --toolbar-height: 52px;
+  --panel-bg: #ffffff;
+  --panel-border: #e0e0e0;
+  --panel-shadow: 0 4px 24px rgba(0,0,0,0.18);
+
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-resume: 'Inter', system-ui, sans-serif;
+
+  /* Config panel tweakable vars */
+  --section-accent-width: 6px;
+  --section-accent-margin: 8px;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  background: #e8e8e8;
+  color: #1a1a1a;
+  font-size: 14px;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+input, textarea, select { font-family: inherit; font-size: inherit; }
+[contenteditable] { outline: none; cursor: text; }
+[contenteditable]:hover { background: rgba(90,122,74,0.07); border-radius: 2px; }
+[contenteditable]:focus { background: rgba(90,122,74,0.12); box-shadow: 0 0 0 1.5px var(--primary); border-radius: 2px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #aaa; }

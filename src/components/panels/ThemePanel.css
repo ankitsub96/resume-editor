@@ -1,0 +1,58 @@
+.cp-swatch-btn {
+  border-radius: 5px;
+  border: 1.5px solid rgba(0,0,0,0.15);
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  display: block;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+.cp-swatch-btn:hover { border-color: var(--primary); }
+
+.cp-popup {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 220px;
+}
+
+/* react-colorful overrides */
+.cp-popup .react-colorful {
+  width: 100%;
+  height: 160px;
+}
+.cp-popup .react-colorful__saturation {
+  border-radius: 4px 4px 0 0;
+}
+.cp-popup .react-colorful__hue,
+.cp-popup .react-colorful__alpha {
+  height: 12px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+.cp-popup .react-colorful__pointer {
+  width: 16px;
+  height: 16px;
+}
+
+.cp-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+.cp-raw-input {
+  flex: 1;
+  padding: 5px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: #333;
+  outline: none;
+}
+.cp-raw-input:focus { border-color: var(--primary); }

@@ -1,0 +1,206 @@
+/* Shared styles for all resume sections */
+
+.resume-section {
+  margin-bottom: var(--section-gap);
+}
+
+.section-title-row {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 10px;
+  border-bottom: 1.5px solid var(--primary);
+}
+
+/* Colored block to the left of title text */
+.section-title-row::before {
+  content: '';
+  display: block;
+  width: var(--section-accent-width, 6px);
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink: 0;
+  margin-right: var(--section-accent-margin, 8px);
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  flex: 1;
+  min-width: 20px;
+  padding: 3px 0 5px;
+}
+
+.section-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--item-gap);
+}
+
+/* Item card */
+.section-item {
+  position: relative;
+}
+
+.section-item:hover .item-remove-btn {
+  opacity: 1;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.item-header-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.item-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.item-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  display: block;
+}
+
+.item-subtitle {
+  font-size: 0.75rem;
+  color: var(--primary-dark);
+  font-style: italic;
+  display: block;
+}
+
+.item-period {
+  font-size: 0.72rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+.item-location {
+  font-size: 0.72rem;
+  color: #777;
+}
+
+.item-remove-btn {
+  opacity: 0;
+  transition: opacity 0.15s;
+  font-size: 1rem;
+  line-height: 1;
+  color: #cc3333;
+  padding: 0 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.item-remove-btn:hover { background: #fee; }
+
+/* Drag handles */
+.item-drag-handle {
+  font-size: 0.85rem;
+  color: #bbb;
+  cursor: grab;
+  padding: 0 4px 0 0;
+  user-select: none;
+  flex-shrink: 0;
+  line-height: 1;
+  opacity: 0.25;
+  transition: opacity 0.15s;
+}
+.item-drag-handle:active { cursor: grabbing; }
+.section-item:hover .item-drag-handle { opacity: 1; }
+
+.bullet-drag {
+  font-size: 0.75rem;
+  color: #aaa;
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+  line-height: 1;
+  opacity: 0.25;
+  transition: opacity 0.15s;
+}
+.bullet-drag:active { cursor: grabbing; }
+.bullet-item:hover .bullet-drag { opacity: 1; }
+
+/* Bullet lists */
+.bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 2px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.76rem;
+  line-height: var(--line-height);
+  color: #333;
+}
+
+.bullet-item::before {
+  content: '•';
+  color: var(--primary);
+  font-size: 0.9em;
+  margin-top: 1px;
+  flex-shrink: 0;
+  order: 1;
+}
+
+.bullet-drag { order: 0; }
+.bullet-item > span:last-child { order: 2; }
+
+.bullet-add {
+  font-size: 0.68rem;
+  color: #aaa;
+  cursor: pointer;
+  padding: 1px 0 1px 14px;
+  user-select: none;
+  list-style: none;
+}
+
+.bullet-add:hover { color: var(--primary); }
+
+/* Add item button */
+.add-item-btn {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  color: var(--primary);
+  background: none;
+  border: 1px dashed var(--primary);
+  border-radius: 3px;
+  padding: 3px 10px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.add-item-btn:hover { opacity: 1; }
+
+/* Sidebar (left column) section styling */
+.column-left .item-title {
+  font-size: 0.78rem;
+}
+
+.column-left .bullet-item {
+  font-size: 0.72rem;
+}

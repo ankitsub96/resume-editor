@@ -1,0 +1,44 @@
+.tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 28px;
+  cursor: text;
+  padding: 2px;
+}
+
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 3px 9px 3px 9px;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.tag-remove {
+  font-size: 0.85rem;
+  line-height: 1;
+  color: rgba(255,255,255,0.8);
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tag-remove:hover { color: #fff; }
+
+.tag-input-field {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.75rem;
+  min-width: 80px;
+  flex: 1;
+  color: #333;
+}
