@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import CONFIG, { loadConfig, saveConfigOverride, resetConfig } from '../../config.js';
+import { useResume } from '../../context/ResumeContext.jsx';
 import './ConfigPanel.css';
 
 /**
@@ -8,22 +9,25 @@ import './ConfigPanel.css';
  * You can also paste a full/partial JSON blob to bulk-apply values.
  */
 export default function ConfigPanel({ onClose }) {
+  const { state } = useResume();
   const [cfg, setCfg] = useState(() => loadConfig());
   const [pasteText, setPasteText] = useState('');
   const [pasteError, setPasteError] = useState('');
   const [copied, setCopied] = useState(false);
   const [activeSection, setActiveSection] = useState('typography');
 
+  const formatSpacing = state.format.spacing;
+
   // Apply config to CSS vars instantly on every change
   useEffect(() => {
-    applyConfigToDOM(cfg);
-  }, [cfg]);
+    applyConfigToDOM(cfg, formatSpacing);
+  }, [cfg, formatSpacing]);
 
   function handleChange(path, value) {
     const next = setNestedValue(cfg, path, value);
     setCfg(next);
     saveConfigOverride(setNestedValue({}, path, value));
-    applyConfigToDOM(next);
+    applyConfigToDOM(next, formatSpacing);
   }
 
   function handlePaste() {
@@ -33,7 +37,7 @@ export default function ConfigPanel({ onClose }) {
       const next = deepMerge(cfg, parsed);
       setCfg(next);
       saveConfigOverride(parsed);
-      applyConfigToDOM(next);
+      applyConfigToDOM(next, formatSpacing);
       setPasteText('');
     } catch (e) {
       setPasteError('Invalid JSON: ' + e.message);
@@ -43,7 +47,7 @@ export default function ConfigPanel({ onClose }) {
   function handleReset() {
     resetConfig();
     setCfg(CONFIG);
-    applyConfigToDOM(CONFIG);
+    applyConfigToDOM(CONFIG, formatSpacing);
   }
 
   function handleCopy() {
@@ -247,9 +251,21 @@ function ConfigField({ label, value, onChange }) {
 
 // ── DOM application ──────────────────────────────────────────────────────────
 
-function applyConfigToDOM(cfg) {
+function applyConfigToDOM(cfg, formatSpacing) {
   const r = document.documentElement;
   const s = (v, k) => r.style.setProperty(v, k);
+
+  // Spacing CSS vars
+  if (formatSpacing !== undefined) {
+    const sp = cfg.spacing || {};
+    const sv = formatSpacing; // 1-10
+    const sectionGap = `${(sp.sectionGapBase ?? 0.4) + (sv - 1) * (sp.sectionGapStep ?? 0.18)}rem`;
+    const itemGap    = `${(sp.itemGapBase ?? 0.3) + (sv - 1) * (sp.itemGapStep ?? 0.1)}rem`;
+    const lineHeight = `${(sp.lineHeightBase ?? 1.3) + (sv - 1) * (sp.lineHeightStep ?? 0.05)}`;
+    s('--section-gap', sectionGap);
+    s('--item-gap', itemGap);
+    s('--line-height', lineHeight);
+  }
 
   // Typography
   const t = cfg.typography || {};

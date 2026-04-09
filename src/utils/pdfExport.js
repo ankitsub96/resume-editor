@@ -41,6 +41,9 @@ async function buildPDF(documentSize, keywords = '', background = '#ffffff') {
   const restore = prepareCanvas(el);
 
   try {
+    // Give the browser two frames to reflow after hiding UI elements
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
     const isLetter = documentSize === 'letter';
     const bg = background || '#ffffff';
 

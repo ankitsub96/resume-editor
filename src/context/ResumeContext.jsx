@@ -3,6 +3,7 @@ import { initialResume } from '../data/initialData.js';
 import { THEMES, DEFAULT_THEME, applyTheme } from '../themes/themes.js';
 import { SECTION_REGISTRY } from '../sections/sectionRegistry.js';
 import { nanoid } from '../utils/nanoid.js';
+import { loadConfig } from '../config.js';
 
 function darkenHex(hex, factor) {
   const c = hex.replace('#', '');
@@ -371,12 +372,14 @@ export function ResumeProvider({ children }) {
     document.documentElement.style.setProperty('--right-col', `${100 - pct}%`);
   }, [state.layout.leftRatioPct]);
 
-  // Apply spacing CSS vars whenever format changes
+  // Apply spacing CSS vars whenever format changes (reads base/step from config so ConfigPanel tweaks take effect)
   useEffect(() => {
+    const cfg = loadConfig();
+    const sp = cfg.spacing || {};
     const s = state.format.spacing; // 1-10
-    const sectionGap = `${0.4 + (s - 1) * 0.18}rem`;
-    const itemGap = `${0.3 + (s - 1) * 0.1}rem`;
-    const lineHeight = `${1.3 + (s - 1) * 0.05}`;
+    const sectionGap = `${(sp.sectionGapBase ?? 0.4) + (s - 1) * (sp.sectionGapStep ?? 0.18)}rem`;
+    const itemGap    = `${(sp.itemGapBase ?? 0.3) + (s - 1) * (sp.itemGapStep ?? 0.1)}rem`;
+    const lineHeight = `${(sp.lineHeightBase ?? 1.3) + (s - 1) * (sp.lineHeightStep ?? 0.05)}`;
     document.documentElement.style.setProperty('--section-gap', sectionGap);
     document.documentElement.style.setProperty('--item-gap', itemGap);
     document.documentElement.style.setProperty('--line-height', lineHeight);

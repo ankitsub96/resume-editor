@@ -26,6 +26,7 @@ export default function EditableText({
 }) {
   const ref = useRef(null);
   const lastValue = useRef(value);
+  const debounceTimer = useRef(null);
 
   // Sync prop → DOM only when value changes externally (avoid caret jump)
   useEffect(() => {
@@ -44,8 +45,15 @@ export default function EditableText({
     }
   }
 
-  const handleBlur = save;
-  const handleInput = save;
+  function handleBlur() {
+    clearTimeout(debounceTimer.current);
+    save();
+  }
+
+  function handleInput() {
+    clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(save, 600);
+  }
 
   function handlePaste(e) {
     e.preventDefault();
