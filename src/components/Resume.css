@@ -13,7 +13,7 @@
   box-shadow: 0 0 24px rgba(0,0,0,0.18);
   flex-shrink: 0;
   font-family: var(--font-resume);
-  font-size: 13px;
+  font-size: var(--font-size-base, 13px);
   display: flex;
   flex-direction: column;
 }

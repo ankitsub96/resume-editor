@@ -2,8 +2,45 @@ import { useResume } from '../../context/ResumeContext.jsx';
 import './Panel.css';
 
 const FONTS = ['Inter', 'Georgia', 'Merriweather', 'Roboto Mono'];
+const SPACING_MAX = 15;
+const FONT_MIN = 10;
+const FONT_MAX = 18;
 
-export default function FormatPanel({ onClose }) {
+function StepSlider({ label, value, min, max, onChange, formatLabel }) {
+  const steps = max - min + 1;
+  return (
+    <>
+      <div className="spacing-label-row">
+        <p className="panel-label" style={{ margin: 0 }}>{label}</p>
+        <span className="spacing-badge">{formatLabel ? formatLabel(value) : value}</span>
+      </div>
+      <div className="spacing-control">
+        <button className="spacing-arrow" onClick={() => onChange(Math.max(min, value - 1))}>‹</button>
+        <div className="spacing-track-wrap">
+          <input
+            type="range"
+            min={min}
+            max={max}
+            value={value}
+            onChange={(e) => onChange(Number(e.target.value))}
+            className="format-slider spacing-slider"
+          />
+          <div className="spacing-dots">
+            {Array.from({ length: steps }, (_, i) => (
+              <span key={i} className={`spacing-dot${min + i <= value ? ' active' : ''}`} />
+            ))}
+          </div>
+          <div className="spacing-minmax">
+            <span>Min</span><span>Max</span>
+          </div>
+        </div>
+        <button className="spacing-arrow" onClick={() => onChange(Math.min(max, value + 1))}>›</button>
+      </div>
+    </>
+  );
+}
+
+export default function FormatPanel({ onClose, pinned = false }) {
   const { state, dispatch } = useResume();
   const { format } = state;
 
@@ -12,10 +49,10 @@ export default function FormatPanel({ onClose }) {
   }
 
   return (
-    <div className="panel">
+    <div className={pinned ? 'panel-sidebar panel-sidebar--right' : 'panel'}>
       <div className="panel-header">
         <span>Format</span>
-        <button className="panel-close" onClick={onClose}>×</button>
+        {!pinned && <button className="panel-close" onClick={onClose}>×</button>}
       </div>
       <div className="panel-body">
 
@@ -30,20 +67,22 @@ export default function FormatPanel({ onClose }) {
           ))}
         </select>
 
-        <p className="panel-label">Content Spacing</p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-          <span style={{ fontSize: '0.7rem', color: '#888' }}>Min</span>
-          <input
-            type="range"
-            min={1}
-            max={10}
-            value={format.spacing}
-            onChange={(e) => setFormat({ spacing: Number(e.target.value) }, 'Changed spacing')}
-            className="format-slider"
-            style={{ flex: 1 }}
-          />
-          <span style={{ fontSize: '0.7rem', color: '#888' }}>Max</span>
-        </div>
+        <StepSlider
+          label="Font Size"
+          value={format.fontSize ?? 13}
+          min={FONT_MIN}
+          max={FONT_MAX}
+          onChange={(v) => setFormat({ fontSize: v }, 'Changed font size')}
+          formatLabel={(v) => `${v}px`}
+        />
+
+        <StepSlider
+          label="Content Spacing"
+          value={format.spacing}
+          min={1}
+          max={SPACING_MAX}
+          onChange={(v) => setFormat({ spacing: v }, 'Changed spacing')}
+        />
 
         <p className="panel-label">Document Size</p>
         <div className="format-radio-group" style={{ marginBottom: 14 }}>
@@ -69,7 +108,6 @@ export default function FormatPanel({ onClose }) {
           />
           Show List Labels
         </label>
-
 
       </div>
     </div>

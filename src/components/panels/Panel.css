@@ -11,6 +11,34 @@
   overflow: hidden;
 }
 
+/* Pinned sidebar variant */
+.panel-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--panel-border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.panel-sidebar--right {
+  border-right: none;
+  border-left: 1px solid var(--panel-border);
+}
+
+.panel-sidebar .panel-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f8f8f8;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.panel-sidebar .panel-body {
+  flex: 1;
+}
+
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -272,6 +300,84 @@
 .format-slider {
   width: 100%;
   accent-color: var(--primary);
+}
+
+/* Spacing control */
+.spacing-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.spacing-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: rgba(90,122,74,0.1);
+  border-radius: 4px;
+  padding: 1px 7px;
+  min-width: 22px;
+  text-align: center;
+}
+
+.spacing-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.spacing-arrow {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid #ddd;
+  font-size: 1rem;
+  line-height: 1;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+.spacing-arrow:hover { border-color: var(--primary); color: var(--primary); }
+
+.spacing-track-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.spacing-slider {
+  width: 100%;
+  margin: 0;
+}
+
+.spacing-dots {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1px;
+}
+
+.spacing-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ddd;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.spacing-dot.active { background: var(--primary); }
+
+.spacing-minmax {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: #aaa;
+  padding: 0 1px;
 }
 
 .format-radio-group {

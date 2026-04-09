@@ -142,7 +142,7 @@ function ColorSwatch({ hex, opacity = 100, onHex, onOpacity, size = 28 }) {
 
 // ── ThemePanel ────────────────────────────────────────────────────────────────
 
-export default function ThemePanel({ onClose }) {
+export default function ThemePanel({ onClose, pinned = false }) {
   const { state, dispatch } = useResume();
 
   function setTheme(key) {
@@ -155,10 +155,10 @@ export default function ThemePanel({ onClose }) {
   const bgHex = state.canvasBackground || '#ffffff';
 
   return (
-    <div className="panel" style={{ minWidth: 280 }}>
+    <div className={pinned ? 'panel-sidebar' : 'panel'} style={!pinned ? { minWidth: 280 } : {}}>
       <div className="panel-header">
         <span>Color Theme</span>
-        <button className="panel-close" onClick={onClose}>×</button>
+        {!pinned && <button className="panel-close" onClick={onClose}>×</button>}
       </div>
       <div className="panel-body">
 

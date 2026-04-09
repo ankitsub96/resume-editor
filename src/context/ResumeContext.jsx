@@ -49,7 +49,8 @@ const buildInitialState = () => ({
     leftRatioPct: 58,         // draggable divider position (10–90)
   },
   format: {
-    spacing: 5,               // 1-10
+    spacing: 5,               // 1-15
+    fontSize: 13,             // px, 10-18
     documentSize: 'a4',       // 'a4' | 'letter'
     showListLabels: false,
     font: 'Inter',
@@ -389,6 +390,12 @@ export function ResumeProvider({ children }) {
   useEffect(() => {
     document.documentElement.style.setProperty('--font-resume', state.format.font + ', system-ui, sans-serif');
   }, [state.format.font]);
+
+  // Apply font size
+  useEffect(() => {
+    const size = state.format.fontSize ?? 13;
+    document.documentElement.style.setProperty('--font-size-base', `${size}px`);
+  }, [state.format.fontSize]);
 
   // Apply canvas background via CSS var (avoids React inline-style override)
   useEffect(() => {

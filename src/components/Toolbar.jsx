@@ -9,7 +9,7 @@ import './Toolbar.css';
 
 const PANEL_KEYS = ['themes', 'layout', 'format', 'history'];
 
-export default function Toolbar({ onDownload }) {
+export default function Toolbar({ onDownload, pinnedPanels = false }) {
   const { state, dispatch, canUndo, canRedo } = useResume();
   const [activePanel, setActivePanel] = useState(null);
   const [showConfig, setShowConfig] = useState(false);
@@ -78,27 +78,31 @@ export default function Toolbar({ onDownload }) {
           {activePanel === 'layout' && <LayoutPanel onClose={closePanel} />}
         </div>
 
-        {/* Themes */}
-        <div className="toolbar-panel-anchor">
-          <button
-            className={`toolbar-btn ${activePanel === 'themes' ? 'active' : ''}`}
-            onClick={() => togglePanel('themes')}
-          >
-            ◑ Themes
-          </button>
-          {activePanel === 'themes' && <ThemePanel onClose={closePanel} />}
-        </div>
+        {/* Themes — hidden when pinned as sidebar */}
+        {!pinnedPanels && (
+          <div className="toolbar-panel-anchor">
+            <button
+              className={`toolbar-btn ${activePanel === 'themes' ? 'active' : ''}`}
+              onClick={() => togglePanel('themes')}
+            >
+              ◑ Themes
+            </button>
+            {activePanel === 'themes' && <ThemePanel onClose={closePanel} />}
+          </div>
+        )}
 
-        {/* Format */}
-        <div className="toolbar-panel-anchor">
-          <button
-            className={`toolbar-btn ${activePanel === 'format' ? 'active' : ''}`}
-            onClick={() => togglePanel('format')}
-          >
-            ≡ Format
-          </button>
-          {activePanel === 'format' && <FormatPanel onClose={closePanel} />}
-        </div>
+        {/* Format — hidden when pinned as sidebar */}
+        {!pinnedPanels && (
+          <div className="toolbar-panel-anchor">
+            <button
+              className={`toolbar-btn ${activePanel === 'format' ? 'active' : ''}`}
+              onClick={() => togglePanel('format')}
+            >
+              ≡ Format
+            </button>
+            {activePanel === 'format' && <FormatPanel onClose={closePanel} />}
+          </div>
+        )}
       </div>
 
       <div className="toolbar-right">

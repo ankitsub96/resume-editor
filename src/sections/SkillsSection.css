@@ -5,7 +5,7 @@
 }
 
 .drag-dot {
-  font-size: 0.7rem;
+  font-size: 0.7em;
   color: var(--chip-text, #fff);
   opacity: 0.5;
   cursor: grab;
@@ -22,7 +22,7 @@
   gap: 4px;
   background: var(--primary);
   color: var(--chip-text, #fff);
-  font-size: 0.7rem;
+  font-size: 0.7em;
   font-weight: 600;
   padding: 3px 9px;
   border-radius: 3px;
@@ -35,7 +35,7 @@
 .skill-remove {
   opacity: 0;
   transition: opacity 0.15s;
-  font-size: 0.85rem;
+  font-size: 0.85em;
   color: var(--chip-text, #fff);
   opacity: 0.7;
   background: none;
@@ -52,7 +52,7 @@
   border: none;
   border-bottom: 1px dashed #ccc;
   outline: none;
-  font-size: 0.7rem;
+  font-size: 0.7em;
   color: #888;
   background: transparent;
   padding: 2px 4px;
