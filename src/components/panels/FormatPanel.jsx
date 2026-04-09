@@ -2,7 +2,7 @@ import { useResume } from '../../context/ResumeContext.jsx';
 import './Panel.css';
 
 const FONTS = ['Inter', 'Georgia', 'Merriweather', 'Roboto Mono'];
-const SPACING_MAX = 15;
+const SPACING_MAX = 25;
 const FONT_MIN = 10;
 const FONT_MAX = 18;
 
