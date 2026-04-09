@@ -1,7 +1,7 @@
 .skills-chip-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: var(--item-gap);
 }
 
 .drag-dot {
