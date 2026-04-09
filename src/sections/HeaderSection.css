@@ -136,6 +136,17 @@
   color: #333;
 }
 
+/* Icon acts as the link — reset <a> styling and show pointer only on icon */
+a.contact-icon {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a.contact-icon:hover {
+  color: var(--primary-dark);
+  opacity: 0.75;
+}
+
 .contact-label {
   min-width: 20px;
 }

@@ -65,23 +65,20 @@ export default function HeaderSection() {
       {/* Left: contacts */}
       <div className="header-left">
         <div className="header-contacts">
-          {header.contacts.map((c) => {
-            const inner = (
-              <>
+          {header.contacts.map((c) => (
+            <span key={c.id} className={`contact-item${c.href ? ' contact-item--link' : ''}`}>
+              {c.href ? (
+                <a href={c.href} className="contact-icon" target="_blank" rel="noopener noreferrer"
+                  title="Open link">
+                  {ICONS[c.icon]}
+                </a>
+              ) : (
                 <span className="contact-icon">{ICONS[c.icon]}</span>
-                <EditableText tag="span" className="contact-label" value={c.label}
-                  onChange={(v) => updateContact(c.id, 'label', v)} placeholder="Contact" />
-              </>
-            );
-            return c.href ? (
-              <a key={c.id} href={c.href} className="contact-item contact-item--link"
-                target="_blank" rel="noopener noreferrer">
-                {inner}
-              </a>
-            ) : (
-              <span key={c.id} className="contact-item">{inner}</span>
-            );
-          })}
+              )}
+              <EditableText tag="span" className="contact-label" value={c.label}
+                onChange={(v) => updateContact(c.id, 'label', v)} placeholder="Contact" />
+            </span>
+          ))}
         </div>
       </div>
 
