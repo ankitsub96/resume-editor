@@ -141,25 +141,25 @@ function ColorSwatch({ hex, opacity = 100, onHex, onOpacity, size = 28 }) {
 }
 
 // ── Accent palette — rows of colors, horizontally scrollable ─────────────────
+// Each group of 3 = [bright, medium, dark] for one hue.
+// Grid flows column-by-column (3 rows), so each column is one hue family.
 const ACCENT_PALETTE = [
-  // Greens
-  '#5a7a4a','#276749','#059669','#2c7a7b','#0d9488','#16a34a','#15803d',
-  // Blues
-  '#2b6cb0','#1e3a5f','#3d5a80','#0284c7','#0369a1','#1d4ed8','#2563eb',
-  // Indigo / Purple
-  '#4338ca','#6366f1','#6b46c1','#7c3aed','#9333ea','#a855f7','#8b5cf6',
-  // Pinks / Reds
-  '#be185d','#db2777','#b76e79','#c53030','#dc2626','#e11d48','#f43f5e',
-  // Burgundy / Rose
-  '#702459','#9d174d','#881337','#7f1d1d','#991b1b',
-  // Oranges / Ambers
-  '#c05621','#92400e','#b45309','#d97706','#f59e0b','#ea580c','#c2410c',
-  // Teals / Cyans
-  '#0e7490','#0891b2','#06b6d4','#0d9488','#14b8a6',
-  // Dark / Neutral
-  '#2d3748','#1a202c','#374151','#1f2937','#4a5568','#334155','#1e293b',
-  // Slate / Cool
-  '#475569','#64748b','#3d5a80','#4b5563',
+  '#a855f7','#7c3aed','#5b21b6', // Violet
+  '#818cf8','#4f46e5','#3730a3', // Indigo
+  '#60a5fa','#2563eb','#1e40af', // Blue
+  '#38bdf8','#0284c7','#075985', // Sky
+  '#22d3ee','#0891b2','#155e75', // Cyan
+  '#2dd4bf','#0d9488','#115e59', // Teal
+  '#4ade80','#16a34a','#166534', // Green
+  '#86efac','#5a7a4a','#276749', // Olive green
+  '#a3e635','#65a30d','#3f6212', // Lime
+  '#fbbf24','#d97706','#b45309', // Amber
+  '#fb923c','#ea580c','#9a3412', // Orange
+  '#f87171','#dc2626','#991b1b', // Red
+  '#fb7185','#e11d48','#881337', // Rose
+  '#f472b6','#db2777','#9d174d', // Pink
+  '#94a3b8','#64748b','#334155', // Slate
+  '#9ca3af','#4b5563','#1f2937', // Charcoal
 ];
 
 // ── ThemePanel ────────────────────────────────────────────────────────────────
