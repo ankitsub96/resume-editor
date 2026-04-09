@@ -116,6 +116,11 @@ export default function Toolbar({ onDownload }) {
           ⚙
         </button>
 
+        {/* Print to PDF — vector PDF with clickable links */}
+        <button className="toolbar-btn" onClick={() => window.print()} title="Print / Save as PDF (links are clickable)">
+          ⎙ Print PDF
+        </button>
+
         {/* Download */}
         <button className="toolbar-btn toolbar-btn--primary" onClick={handleDownload}>
           ↓ Download PDF

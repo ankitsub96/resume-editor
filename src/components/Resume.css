@@ -167,7 +167,37 @@
 }
 
 @media print {
-  .resume-wrapper { background: none; padding: 0; }
-  .resume-canvas { box-shadow: none; }
-  .section-drag-handle, .column-divider { display: none !important; }
+  /* Hide all UI chrome */
+  .toolbar,
+  .add-item-btn, .item-remove-btn, .bullet-add,
+  .section-drag-handle, .photo-remove-btn,
+  .item-drag-handle, .bullet-drag,
+  .skill-remove, .skill-add-input,
+  .tag-input-field, .tag-remove,
+  .column-divider { display: none !important; }
+
+  /* Remove app shell */
+  html, body { background: none !important; }
+  .app-shell { height: auto !important; overflow: visible !important; }
+
+  .resume-wrapper {
+    background: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    flex: none !important;
+    display: block !important;
+  }
+
+  .resume-canvas {
+    box-shadow: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* No hover/focus highlights on editable fields */
+  [contenteditable]:hover,
+  [contenteditable]:focus {
+    background: none !important;
+    box-shadow: none !important;
+  }
 }
