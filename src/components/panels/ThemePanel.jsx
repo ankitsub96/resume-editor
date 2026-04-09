@@ -140,19 +140,40 @@ function ColorSwatch({ hex, opacity = 100, onHex, onOpacity, size = 28 }) {
   );
 }
 
+// ── Accent palette — rows of colors, horizontally scrollable ─────────────────
+const ACCENT_PALETTE = [
+  // Greens
+  '#5a7a4a','#276749','#059669','#2c7a7b','#0d9488','#16a34a','#15803d',
+  // Blues
+  '#2b6cb0','#1e3a5f','#3d5a80','#0284c7','#0369a1','#1d4ed8','#2563eb',
+  // Indigo / Purple
+  '#4338ca','#6366f1','#6b46c1','#7c3aed','#9333ea','#a855f7','#8b5cf6',
+  // Pinks / Reds
+  '#be185d','#db2777','#b76e79','#c53030','#dc2626','#e11d48','#f43f5e',
+  // Burgundy / Rose
+  '#702459','#9d174d','#881337','#7f1d1d','#991b1b',
+  // Oranges / Ambers
+  '#c05621','#92400e','#b45309','#d97706','#f59e0b','#ea580c','#c2410c',
+  // Teals / Cyans
+  '#0e7490','#0891b2','#06b6d4','#0d9488','#14b8a6',
+  // Dark / Neutral
+  '#2d3748','#1a202c','#374151','#1f2937','#4a5568','#334155','#1e293b',
+  // Slate / Cool
+  '#475569','#64748b','#3d5a80','#4b5563',
+];
+
 // ── ThemePanel ────────────────────────────────────────────────────────────────
 
 export default function ThemePanel({ onClose, pinned = false }) {
   const { state, dispatch } = useResume();
 
-  function setTheme(key) {
-    dispatch({ type: 'SET_THEME', themeKey: key });
-    dispatch({ type: 'SET_CUSTOM_ACCENT', color: null });
-  }
-
   const chipTextColor = state.chipTextColor || 'auto';
   const accentHex = state.customAccent || THEMES[state.theme]?.vars['--primary'] || '#5a7a4a';
   const bgHex = state.canvasBackground || '#ffffff';
+
+  function pickAccent(hex) {
+    dispatch({ type: 'SET_CUSTOM_ACCENT', color: hex });
+  }
 
   return (
     <div className={pinned ? 'panel-sidebar' : 'panel'} style={!pinned ? { minWidth: 280 } : {}}>
@@ -162,21 +183,22 @@ export default function ThemePanel({ onClose, pinned = false }) {
       </div>
       <div className="panel-body">
 
-        {/* Accent presets */}
+        {/* Accent Color */}
         <p className="panel-label">Accent Color</p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-          <div className="theme-swatches" style={{ flex: 1 }}>
-            {Object.entries(THEMES).map(([key, theme]) => (
-              <button key={key}
-                className={`theme-swatch ${state.theme === key && !state.customAccent ? 'active' : ''}`}
-                style={{ background: theme.vars['--primary'] }}
-                title={theme.name}
-                onClick={() => setTheme(key)}
-              >
-                {state.theme === key && !state.customAccent && <span className="swatch-check">✓</span>}
-              </button>
-            ))}
-          </div>
+        <div className="accent-scroll">
+          {ACCENT_PALETTE.map(hex => (
+            <button key={hex}
+              className={`accent-dot${accentHex === hex ? ' active' : ''}`}
+              style={{ background: hex }}
+              title={hex}
+              onClick={() => pickAccent(hex)}
+            >
+              {accentHex === hex && <span className="swatch-check">✓</span>}
+            </button>
+          ))}
+        </div>
+        <div className="accent-custom-row">
+          <span className="accent-custom-label">Custom color</span>
           <ColorSwatch
             hex={accentHex}
             opacity={state.customAccentOpacity ?? 100}
@@ -184,11 +206,6 @@ export default function ThemePanel({ onClose, pinned = false }) {
             onOpacity={value => dispatch({ type: 'SET_CUSTOM_ACCENT_OPACITY', value })}
           />
         </div>
-        {state.customAccent && (
-          <button onClick={() => dispatch({ type: 'SET_CUSTOM_ACCENT', color: null })}
-            style={{ marginTop: 6, fontSize: '0.7rem', color: '#888', background: 'none', border: '1px solid #ddd', borderRadius: 4, padding: '2px 8px', cursor: 'pointer' }}
-          >Reset to theme</button>
-        )}
 
         {/* Background */}
         <p className="panel-label" style={{ marginTop: 16 }}>Background</p>
@@ -208,12 +225,15 @@ export default function ThemePanel({ onClose, pinned = false }) {
               }}
             />
           ))}
-          <ColorSwatch
-            hex={bgHex}
-            opacity={state.canvasBackgroundOpacity ?? 100}
-            onHex={color => dispatch({ type: 'SET_CANVAS_BG', color })}
-            onOpacity={value => dispatch({ type: 'SET_CANVAS_BG_OPACITY', value })}
-          />
+          <div className="custom-swatch-wrap">
+            <span className="custom-swatch-label">Custom</span>
+            <ColorSwatch
+              hex={bgHex}
+              opacity={state.canvasBackgroundOpacity ?? 100}
+              onHex={color => dispatch({ type: 'SET_CANVAS_BG', color })}
+              onOpacity={value => dispatch({ type: 'SET_CANVAS_BG_OPACITY', value })}
+            />
+          </div>
         </div>
 
         {/* Chip text */}
@@ -230,13 +250,16 @@ export default function ThemePanel({ onClose, pinned = false }) {
               }}
             >{lbl}</button>
           ))}
-          <ColorSwatch
-            hex={chipTextColor === 'auto' ? '#ffffff' : chipTextColor}
-            opacity={100}
-            onHex={color => dispatch({ type: 'SET_CHIP_TEXT_COLOR', color })}
-            onOpacity={() => {}}
-            size={24}
-          />
+          <div className="custom-swatch-wrap">
+            <span className="custom-swatch-label">Custom</span>
+            <ColorSwatch
+              hex={chipTextColor === 'auto' ? '#ffffff' : chipTextColor}
+              opacity={100}
+              onHex={color => dispatch({ type: 'SET_CHIP_TEXT_COLOR', color })}
+              onOpacity={() => {}}
+              size={24}
+            />
+          </div>
         </div>
 
       </div>
