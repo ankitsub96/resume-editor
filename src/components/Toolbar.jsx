@@ -11,6 +11,7 @@ const PANEL_KEYS = ['themes', 'layout', 'format', 'history'];
 
 export default function Toolbar({ onDownload, pinnedPanels = false }) {
   const { state, dispatch, canUndo, canRedo } = useResume();
+  const accent = state.customAccent || 'var(--primary)';
   const [activePanel, setActivePanel] = useState(null);
   const [showConfig, setShowConfig] = useState(false);
   const toolbarRef = useRef(null);
@@ -41,7 +42,7 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
   }
 
   return (
-    <div className="toolbar" ref={toolbarRef}>
+    <div className="toolbar" ref={toolbarRef} style={{ background: accent }}>
       <div className="toolbar-left">
         <span className="toolbar-brand">Resume Editor</span>
       </div>
@@ -54,7 +55,7 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
           disabled={!canUndo}
           title="Undo (Ctrl+Z)"
         >
-          ↩ Undo
+          ⟲ Undo
         </button>
         <button
           className="toolbar-btn"
@@ -62,7 +63,7 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
           disabled={!canRedo}
           title="Redo (Ctrl+Y)"
         >
-          Redo ↪
+          Redo ⟳
         </button>
 
         <span className="toolbar-sep" />
@@ -73,7 +74,7 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
             className={`toolbar-btn ${activePanel === 'layout' ? 'active' : ''}`}
             onClick={() => togglePanel('layout')}
           >
-            ⊞ Layout
+            ▤ Layout
           </button>
           {activePanel === 'layout' && <LayoutPanel onClose={closePanel} />}
         </div>
@@ -85,7 +86,7 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
               className={`toolbar-btn ${activePanel === 'themes' ? 'active' : ''}`}
               onClick={() => togglePanel('themes')}
             >
-              ◑ Themes
+              ◑ Colors
             </button>
             {activePanel === 'themes' && <ThemePanel onClose={closePanel} />}
           </div>
@@ -98,7 +99,7 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
               className={`toolbar-btn ${activePanel === 'format' ? 'active' : ''}`}
               onClick={() => togglePanel('format')}
             >
-              ≡ Format
+              ☰ Format
             </button>
             {activePanel === 'format' && <FormatPanel onClose={closePanel} />}
           </div>
@@ -112,17 +113,17 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
           onClick={() => togglePanel('history')}
           title="Edit History"
         >
-          🕐 History
+          ◷ History
         </button>
 
         {/* Config */}
-        <button className="toolbar-btn" onClick={() => setShowConfig(true)} title="Edit config">
-          ⚙
+        <button className="toolbar-btn" onClick={() => setShowConfig(true)} title="Settings">
+          ⚙ Settings
         </button>
 
         {/* Download */}
         <button className="toolbar-btn toolbar-btn--primary" onClick={handleDownload}>
-          ↓ Download PDF
+          ⬇ Download PDF
         </button>
       </div>
 
