@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import Toolbar from './components/Toolbar.jsx';
 import Resume from './components/Resume.jsx';
-import PDFPreviewModal from './components/PDFPreviewModal.jsx';
+const PDFPreviewModal = lazy(() => import('./components/PDFPreviewModal.jsx'));
 import ThemePanel from './components/panels/ThemePanel.jsx';
 import FormatPanel from './components/panels/FormatPanel.jsx';
 import { applyConfigOnStartup } from './utils/applyConfig.js';
@@ -32,7 +32,11 @@ export default function App() {
         <Resume />
         {pinned && <FormatPanel pinned />}
       </div>
-      {showPDFPreview && <PDFPreviewModal onClose={() => setShowPDFPreview(false)} />}
+      {showPDFPreview && (
+        <Suspense fallback={null}>
+          <PDFPreviewModal onClose={() => setShowPDFPreview(false)} />
+        </Suspense>
+      )}
     </div>
   );
 }
