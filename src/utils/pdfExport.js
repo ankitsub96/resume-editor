@@ -1,9 +1,11 @@
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
-/** Convert hex + opacity% to a CSS color string */
+/** Convert hex + opacity% to a CSS color string, or pass through gradient values */
 export function resolveBackground(hex = '#ffffff', opacityPct = 100) {
-  const c = (hex || '#ffffff').replace('#', '');
+  const raw = hex || '#ffffff';
+  if (raw.startsWith('linear-gradient') || raw.startsWith('radial-gradient')) return raw;
+  const c = raw.replace('#', '');
   const r = parseInt(c.substring(0, 2), 16) || 255;
   const g = parseInt(c.substring(2, 4), 16) || 255;
   const b = parseInt(c.substring(4, 6), 16) || 255;

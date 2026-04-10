@@ -14,7 +14,7 @@
   top: 0;
   bottom: 0;
   width: 5px;
-  background: var(--primary);
+  background: var(--primary-gradient, var(--primary));
 }
 
 /* Left: contacts */
@@ -48,6 +48,12 @@
   margin-bottom: 2px;
   display: block;
   min-width: 40px;
+}
+[data-gradient-accent] .header-name {
+  background-image: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .header-title {

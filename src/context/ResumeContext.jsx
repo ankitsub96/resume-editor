@@ -359,11 +359,27 @@ export function ResumeProvider({ children }) {
   // Apply theme CSS vars, then overlay custom accent + opacity if set
   useEffect(() => {
     applyTheme(state.theme);
+    const root = document.documentElement;
     if (state.customAccent) {
       const op = state.customAccentOpacity ?? 100;
-      document.documentElement.style.setProperty('--primary', hexToRgba(state.customAccent, op));
-      document.documentElement.style.setProperty('--primary-dark', hexToRgba(darkenHex(state.customAccent, 0.75), op));
-      document.documentElement.style.setProperty('--accent', hexToRgba(state.customAccent, op));
+      const isGradient = state.customAccent.startsWith('linear-gradient') || state.customAccent.startsWith('radial-gradient');
+      if (isGradient) {
+        const firstStop = state.customAccent.match(/#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}/)?.[0] ?? '#5a7a4a';
+        root.style.setProperty('--primary', firstStop);
+        root.style.setProperty('--primary-dark', darkenHex(firstStop, 0.75));
+        root.style.setProperty('--accent', firstStop);
+        root.style.setProperty('--primary-gradient', state.customAccent);
+        root.setAttribute('data-gradient-accent', '');
+      } else {
+        root.style.setProperty('--primary', hexToRgba(state.customAccent, op));
+        root.style.setProperty('--primary-dark', hexToRgba(darkenHex(state.customAccent, 0.75), op));
+        root.style.setProperty('--accent', hexToRgba(state.customAccent, op));
+        root.style.removeProperty('--primary-gradient');
+        root.removeAttribute('data-gradient-accent');
+      }
+    } else {
+      root.style.removeProperty('--primary-gradient');
+      root.removeAttribute('data-gradient-accent');
     }
   }, [state.theme, state.customAccent, state.customAccentOpacity]);
 
@@ -406,7 +422,10 @@ export function ResumeProvider({ children }) {
 
   // Apply canvas background via CSS var (avoids React inline-style override)
   useEffect(() => {
-    const bg = hexToRgba(state.canvasBackground || '#ffffff', state.canvasBackgroundOpacity ?? 100);
+    const raw = state.canvasBackground || '#ffffff';
+    const bg = raw.startsWith('linear-gradient') || raw.startsWith('radial-gradient')
+      ? raw
+      : hexToRgba(raw, state.canvasBackgroundOpacity ?? 100);
     document.documentElement.style.setProperty('--canvas-bg', bg);
   }, [state.canvasBackground, state.canvasBackgroundOpacity]);
 
