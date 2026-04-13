@@ -77,45 +77,55 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 6px 24px rgba(0,0,0,0.18);
-  padding: 12px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 260px;
+  gap: 8px;
+  width: 267px;
+  transform: scale(0.78);
+  transform-origin: top left;
+}
+
+/* CSS value text input */
+.cp-css-input {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-family: monospace;
+  color: #333;
+  outline: none;
+  box-sizing: border-box;
+}
+.cp-css-input:focus { border-color: var(--primary); }
+.cp-css-input--invalid { border-color: #e55; background: #fff5f5; }
+
+/* Shrink react-gcolor-picker internals */
+.cp-popup .popup_tabs {
+  width: 100% !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+.cp-popup .color-picker-panel-wrap {
+  width: 100% !important;
 }
 
 /* react-colorful overrides */
 .cp-popup .react-colorful {
   width: 100%;
-  height: 160px;
+  height: 130px;
 }
 .cp-popup .react-colorful__saturation {
   border-radius: 4px 4px 0 0;
 }
 .cp-popup .react-colorful__hue,
 .cp-popup .react-colorful__alpha {
-  height: 12px;
+  height: 10px;
   border-radius: 6px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .cp-popup .react-colorful__pointer {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
-
-.cp-input-row {
-  display: flex;
-  gap: 6px;
-}
-
-.cp-raw-input {
-  flex: 1;
-  padding: 5px 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-family: monospace;
-  color: #333;
-  outline: none;
-}
-.cp-raw-input:focus { border-color: var(--primary); }

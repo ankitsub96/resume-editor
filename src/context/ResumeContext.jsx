@@ -369,7 +369,9 @@ export function ResumeProvider({ children }) {
       const op = state.customAccentOpacity ?? 100;
       const isGradient = state.customAccent.startsWith('linear-gradient') || state.customAccent.startsWith('radial-gradient');
       if (isGradient) {
-        const firstStop = state.customAccent.match(/#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}/)?.[0] ?? '#5a7a4a';
+        const hexStop  = state.customAccent.match(/#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}/)?.[0];
+        const rgbaStop = state.customAccent.match(/rgba?\([^)]+\)/)?.[0];
+        const firstStop = hexStop ?? rgbaStop ?? '#5a7a4a';
         root.style.setProperty('--primary', firstStop);
         root.style.setProperty('--primary-dark', darkenHex(firstStop, 0.75));
         root.style.setProperty('--accent', firstStop);

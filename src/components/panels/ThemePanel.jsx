@@ -15,18 +15,22 @@ const BG_PRESETS = [
 function GradientPicker({ value, onChange, size = 28, gradient = false }) {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ top: 0, left: 0 });
+  const [cssInput, setCssInput] = useState('');
+  const [cssInvalid, setCssInvalid] = useState(false);
   const btnRef = useRef(null);
   const popupRef = useRef(null);
 
   function handleOpen() {
     if (open) { setOpen(false); return; }
     const rect = btnRef.current.getBoundingClientRect();
-    const popupW = 270, popupH = gradient ? 420 : 320;
+    const popupW = 210, popupH = gradient ? 300 : 220;
     let left = rect.left;
     let top = rect.bottom + 6;
     if (left + popupW > window.innerWidth - 8) left = window.innerWidth - popupW - 8;
     if (top + popupH > window.innerHeight - 8) top = rect.top - popupH - 6;
     setPos({ top, left });
+    setCssInput(value || '');
+    setCssInvalid(false);
     setOpen(true);
   }
 
@@ -40,6 +44,15 @@ function GradientPicker({ value, onChange, size = 28, gradient = false }) {
     return () => document.removeEventListener('mousedown', onDown);
   }, [open]);
 
+  function applyCssInput(raw) {
+    const v = raw.trim();
+    if (!v) return;
+    // Accept hex, rgb/rgba, hsl/hsla, named colors, gradients
+    const valid = /^(#[0-9a-f]{3,8}|rgba?\(|hsla?\(|linear-gradient|radial-gradient|[a-z]+)/.test(v.toLowerCase());
+    if (valid) { onChange(v); setCssInvalid(false); }
+    else setCssInvalid(true);
+  }
+
   return (
     <>
       <button ref={btnRef} className="cp-swatch-btn"
@@ -47,8 +60,19 @@ function GradientPicker({ value, onChange, size = 28, gradient = false }) {
         onClick={handleOpen} title={gradient ? 'Pick color or gradient' : 'Pick color'} />
       {open && (
         <div ref={popupRef} className="cp-popup" style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 9999 }}>
+          <input
+            className={`cp-css-input${cssInvalid ? ' cp-css-input--invalid' : ''}`}
+            value={cssInput}
+            onChange={e => { setCssInput(e.target.value); setCssInvalid(false); }}
+            onBlur={e => applyCssInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') applyCssInput(cssInput); }}
+            placeholder={gradient ? '#hex or linear-gradient(…)' : '#hex or rgb(…)'}
+            spellCheck={false}
+          />
           <ReactGPicker value={value || '#ffffff'} format="hex"
-            gradient={gradient} onChange={onChange} />
+            gradient={gradient}
+            onChange={v => { onChange(v); setCssInput(v); }}
+          />
         </div>
       )}
     </>
