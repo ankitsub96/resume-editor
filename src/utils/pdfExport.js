@@ -13,26 +13,22 @@ export function resolveBackground(hex = '#ffffff', opacityPct = 100) {
   return a >= 1 ? `#${c}` : `rgba(${r},${g},${b},${a.toFixed(2)})`;
 }
 
+const EXPORT_CLASS = 'pdf-exporting';
+
+export function restoreCanvas() {
+  document.getElementById('resume-canvas')?.classList.remove(EXPORT_CLASS);
+}
+
 function prepareCanvas(canvas) {
-  const editEls = canvas.querySelectorAll(
-    '.add-item-btn, .item-remove-btn, .bullet-add, .tag-input-field, .tag-remove, ' +
-    '.section-drag-handle, .photo-remove-btn, .drag-dot, .item-drag-handle, .bullet-drag, ' +
-    '.skill-remove, .skill-add-input, .column-divider'
-  );
-  const prevDisplay = [];
-  editEls.forEach(el => { prevDisplay.push(el.style.display); el.style.display = 'none'; });
+  canvas.classList.add(EXPORT_CLASS);
 
   const photoEl = canvas.querySelector('.header-photo');
   const hasRealPhoto = !!photoEl?.querySelector('img');
-  let prevPhotoDisplay = null;
-  if (photoEl && !hasRealPhoto) {
-    prevPhotoDisplay = photoEl.style.display;
-    photoEl.style.display = 'none';
-  }
+  if (photoEl && !hasRealPhoto) photoEl.style.visibility = 'hidden';
 
   return () => {
-    editEls.forEach((el, i) => { el.style.display = prevDisplay[i]; });
-    if (photoEl && prevPhotoDisplay !== null) photoEl.style.display = prevPhotoDisplay;
+    canvas.classList.remove(EXPORT_CLASS);
+    if (photoEl && !hasRealPhoto) photoEl.style.visibility = '';
   };
 }
 

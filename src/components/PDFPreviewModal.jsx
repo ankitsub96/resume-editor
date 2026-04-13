@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useResume } from '../context/ResumeContext.jsx';
-import { generatePDFPreviewUrl, exportPDF, resolveBackground } from '../utils/pdfExport.js';
+import { generatePDFPreviewUrl, exportPDF, resolveBackground, restoreCanvas } from '../utils/pdfExport.js';
 import './PDFPreviewModal.css';
 
 export default function PDFPreviewModal({ onClose }) {
@@ -23,6 +23,7 @@ export default function PDFPreviewModal({ onClose }) {
     });
     return () => {
       cancelled = true;
+      restoreCanvas();
       if (urlRef.current) URL.revokeObjectURL(urlRef.current);
     };
   }, []);
@@ -37,7 +38,7 @@ export default function PDFPreviewModal({ onClose }) {
   }
 
   function setKeywords(val) {
-    dispatch({ type: 'SET_FORMAT', payload: { pdfKeywords: val } });
+    dispatch({ type: 'SET_PDF_KEYWORDS', value: val });
   }
 
   return (

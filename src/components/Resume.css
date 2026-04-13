@@ -1,3 +1,19 @@
+/* Hide all edit-only UI during PDF export */
+#resume-canvas.pdf-exporting .add-item-btn,
+#resume-canvas.pdf-exporting .item-remove-btn,
+#resume-canvas.pdf-exporting .bullet-add,
+#resume-canvas.pdf-exporting .tag-input-field,
+#resume-canvas.pdf-exporting .tag-remove,
+#resume-canvas.pdf-exporting .section-drag-handle,
+#resume-canvas.pdf-exporting .drag-dot,
+#resume-canvas.pdf-exporting .item-drag-handle,
+#resume-canvas.pdf-exporting .bullet-drag,
+#resume-canvas.pdf-exporting .skill-remove,
+#resume-canvas.pdf-exporting .skill-add-input,
+#resume-canvas.pdf-exporting .column-divider {
+  display: none !important;
+}
+
 .resume-wrapper {
   flex: 1;
   overflow: auto;

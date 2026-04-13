@@ -246,6 +246,9 @@ function reducer(state, action) {
       return { ...state, resume: { ...state.resume, sections: action.sections }, ...hist };
     }
 
+    case 'SET_PDF_KEYWORDS':
+      return { ...state, format: { ...state.format, pdfKeywords: action.value } };
+
     case 'SET_CUSTOM_ACCENT':
       return { ...state, customAccent: action.color };
 
