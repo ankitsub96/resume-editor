@@ -94,9 +94,17 @@ function applyPresetToSections(sections, presetKey) {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+const SNAPSHOT_KEYS = ['resume', 'theme', 'customAccent', 'customAccentOpacity',
+  'canvasBackground', 'canvasBackgroundOpacity', 'chipTextColor', 'layout', 'format'];
+
 function snapshot(state) {
-  // Deep-clone the mutable parts of state
-  return JSON.parse(JSON.stringify({ resume: state.resume }));
+  const s = {};
+  for (const k of SNAPSHOT_KEYS) s[k] = state[k];
+  return JSON.parse(JSON.stringify(s));
+}
+
+function applySnapshot(state, snap) {
+  return { ...state, ...snap };
 }
 
 function pushHistory(state, label, section = '') {
@@ -303,32 +311,20 @@ function reducer(state, action) {
       if (state.historyIndex <= 0) return state;
       const prevIndex = state.historyIndex - 1;
       const entry = state.history[prevIndex];
-      return {
-        ...state,
-        resume: JSON.parse(JSON.stringify(entry.snapshot.resume)),
-        historyIndex: prevIndex,
-      };
+      return applySnapshot({ ...state, historyIndex: prevIndex }, entry.snapshot);
     }
 
     case 'REDO': {
       if (state.historyIndex >= state.history.length - 1) return state;
       const nextIndex = state.historyIndex + 1;
       const entry = state.history[nextIndex];
-      return {
-        ...state,
-        resume: JSON.parse(JSON.stringify(entry.snapshot.resume)),
-        historyIndex: nextIndex,
-      };
+      return applySnapshot({ ...state, historyIndex: nextIndex }, entry.snapshot);
     }
 
     case 'HISTORY_JUMP': {
       const entry = state.history[action.index];
       if (!entry) return state;
-      return {
-        ...state,
-        resume: JSON.parse(JSON.stringify(entry.snapshot.resume)),
-        historyIndex: action.index,
-      };
+      return applySnapshot({ ...state, historyIndex: action.index }, entry.snapshot);
     }
 
     case 'IMPORT_RESUME': {
@@ -337,7 +333,8 @@ function reducer(state, action) {
     }
 
     case 'LOAD_STATE': {
-      return action.state;
+      const hist = pushHistory(state, 'Loaded from JSON');
+      return { ...action.state, history: hist.history, historyIndex: hist.historyIndex };
     }
 
     default:

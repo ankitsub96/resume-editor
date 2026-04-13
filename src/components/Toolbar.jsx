@@ -145,20 +145,42 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
           ⚙ Settings
         </button>
 
-        {/* Copy JSON */}
-        <button className="toolbar-btn" onClick={handleCopyJson} title="Copy full state as JSON">
-          {copiedJson ? '✓ Copied' : '⎘ Copy JSON'}
-        </button>
-
-        {/* Paste JSON */}
-        <button className="toolbar-btn" onClick={() => { setShowJsonImport(true); setJsonText(''); setJsonError(''); }} title="Load from JSON">
-          ⎗ Paste JSON
-        </button>
-
-        {/* Import */}
-        <button className="toolbar-btn" onClick={() => setShowImport(true)} title="Import from PDF">
-          ⬆ Import PDF
-        </button>
+        {/* Files panel */}
+        <div className="toolbar-panel-anchor">
+          <button
+            className={`toolbar-btn ${activePanel === 'files' ? 'active' : ''}`}
+            onClick={() => togglePanel('files')}
+          >
+            ⇅ Files
+          </button>
+          {activePanel === 'files' && (
+            <div className="files-panel">
+              <button className="files-action" onClick={() => { handleCopyJson(); }}>
+                <span className="files-action__icon">⎘</span>
+                <span className="files-action__text">
+                  <strong>Export Data</strong>
+                  <small>Copy all resume data to clipboard</small>
+                </span>
+                {copiedJson && <span className="files-action__badge">✓ Copied!</span>}
+              </button>
+              <button className="files-action" onClick={() => { closePanel(); setShowJsonImport(true); setJsonText(''); setJsonError(''); }}>
+                <span className="files-action__icon">⎗</span>
+                <span className="files-action__text">
+                  <strong>Import Data</strong>
+                  <small>Paste previously exported data</small>
+                </span>
+              </button>
+              <div className="files-divider" />
+              <button className="files-action" onClick={() => { closePanel(); setShowImport(true); }}>
+                <span className="files-action__icon">⬆</span>
+                <span className="files-action__text">
+                  <strong>Import File</strong>
+                  <small>Load resume from a PDF</small>
+                </span>
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Download */}
         <button className="toolbar-btn toolbar-btn--primary" onClick={handleDownload}>
@@ -183,7 +205,7 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
       {showJsonImport && (
         <div className="modal-backdrop" onClick={() => setShowJsonImport(false)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
-            <h3 className="modal-title">Paste JSON</h3>
+            <h3 className="modal-title">Import Data</h3>
             <textarea
               className="json-paste-area"
               placeholder="Paste exported JSON here…"
