@@ -427,13 +427,23 @@ export function ResumeProvider({ children }) {
     document.documentElement.style.setProperty('--content-padding-h', `${p}px`);
   }, [state.format.contentPaddingH]);
 
-  // Apply canvas background via CSS var (avoids React inline-style override)
+  // Apply canvas background via CSS var + derive --resume-text contrast color
   useEffect(() => {
     const raw = state.canvasBackground || '#ffffff';
-    const bg = raw.startsWith('linear-gradient') || raw.startsWith('radial-gradient')
-      ? raw
-      : hexToRgba(raw, state.canvasBackgroundOpacity ?? 100);
+    const isGradient = raw.startsWith('linear-gradient') || raw.startsWith('radial-gradient');
+    const bg = isGradient ? raw : hexToRgba(raw, state.canvasBackgroundOpacity ?? 100);
     document.documentElement.style.setProperty('--canvas-bg', bg);
+
+    // For contrast, extract the first hex or rgba color from gradient, or use raw
+    const sample = isGradient
+      ? (raw.match(/#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}/)?.[0] ?? raw.match(/rgba?\([^)]+\)/)?.[0] ?? '#ffffff')
+      : raw;
+    const text = contrastColor(sample.startsWith('#') ? sample : '#ffffff');
+    const muted = text === '#ffffff' ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.45)';
+    const border = text === '#ffffff' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)';
+    document.documentElement.style.setProperty('--resume-text', text);
+    document.documentElement.style.setProperty('--resume-text-muted', muted);
+    document.documentElement.style.setProperty('--resume-border', border);
   }, [state.canvasBackground, state.canvasBackgroundOpacity]);
 
   // Apply chip text color CSS var

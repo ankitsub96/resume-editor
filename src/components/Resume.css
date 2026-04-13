@@ -26,6 +26,7 @@
 
 .resume-canvas {
   background: var(--canvas-bg, #fff);
+  color: var(--resume-text, #1a1a1a);
   box-shadow: 0 0 24px rgba(0,0,0,0.18);
   flex-shrink: 0;
   font-family: var(--font-resume);

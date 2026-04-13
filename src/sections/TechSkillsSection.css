@@ -23,7 +23,7 @@
 
 .tech-category {
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--resume-text, #1a1a1a);
   min-width: 20px;
 }
 
@@ -32,6 +32,6 @@
 }
 
 .tech-values {
-  color: #444;
+  color: var(--resume-text-muted, #444);
   min-width: 40px;
 }

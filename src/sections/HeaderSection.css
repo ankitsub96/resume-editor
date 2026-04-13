@@ -55,11 +55,18 @@
   background-clip: text;
   color: transparent;
 }
+[data-gradient-accent] .header-name:focus,
+[data-gradient-accent] .header-name:focus-within {
+  background-image: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  color: var(--primary);
+}
 
 .header-title {
   font-size: 0.88em;
   font-weight: 500;
-  color: #555;
+  color: var(--resume-text-muted, #555);
   letter-spacing: 0.03em;
   margin-bottom: 10px;
   display: block;
@@ -68,7 +75,7 @@
 .header-summary {
   font-size: 0.76em;
   line-height: 1.58;
-  color: #444;
+  color: var(--resume-text, #1a1a1a);
   display: block;
   min-width: 40px;
 }
@@ -134,12 +141,12 @@
   align-items: center;
   gap: 6px;
   font-size: 0.72em;
-  color: #333;
+  color: var(--resume-text, #333);
 }
 
 .contact-item--link {
   text-decoration: none;
-  color: #333;
+  color: var(--resume-text, #333);
 }
 
 /* Icon acts as the link — reset <a> styling and show pointer only on icon */
