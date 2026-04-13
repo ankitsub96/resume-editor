@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, lazy, Suspense } from 'react';
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react';
 import { useResume } from '../context/ResumeContext.jsx';
 const ImportPDFModal = lazy(() => import('./ImportPDFModal.jsx'));
 import ThemePanel from './panels/ThemePanel.jsx';
@@ -16,6 +16,10 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
   const [activePanel, setActivePanel] = useState(null);
   const [showConfig, setShowConfig] = useState(false);
   const [showImport, setShowImport] = useState(false);
+  const [showJsonImport, setShowJsonImport] = useState(false);
+  const [jsonText, setJsonText] = useState('');
+  const [jsonError, setJsonError] = useState('');
+  const [copiedJson, setCopiedJson] = useState(false);
   const toolbarRef = useRef(null);
 
   function togglePanel(key) {
@@ -37,6 +41,24 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [activePanel]);
+
+  const handleCopyJson = useCallback(() => {
+    navigator.clipboard.writeText(JSON.stringify(state, null, 2));
+    setCopiedJson(true);
+    setTimeout(() => setCopiedJson(false), 1500);
+  }, [state]);
+
+  function handleJsonImport() {
+    try {
+      const parsed = JSON.parse(jsonText);
+      dispatch({ type: 'LOAD_STATE', state: parsed });
+      setShowJsonImport(false);
+      setJsonText('');
+      setJsonError('');
+    } catch {
+      setJsonError('Invalid JSON');
+    }
+  }
 
   function handleDownload() {
     setActivePanel(null);
@@ -123,6 +145,16 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
           ⚙ Settings
         </button>
 
+        {/* Copy JSON */}
+        <button className="toolbar-btn" onClick={handleCopyJson} title="Copy full state as JSON">
+          {copiedJson ? '✓ Copied' : '⎘ Copy JSON'}
+        </button>
+
+        {/* Paste JSON */}
+        <button className="toolbar-btn" onClick={() => { setShowJsonImport(true); setJsonText(''); setJsonError(''); }} title="Load from JSON">
+          ⎗ Paste JSON
+        </button>
+
         {/* Import */}
         <button className="toolbar-btn" onClick={() => setShowImport(true)} title="Import from PDF">
           ⬆ Import PDF
@@ -145,6 +177,27 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
         <Suspense fallback={null}>
           <ImportPDFModal onClose={() => setShowImport(false)} />
         </Suspense>
+      )}
+
+      {/* Paste JSON modal */}
+      {showJsonImport && (
+        <div className="modal-backdrop" onClick={() => setShowJsonImport(false)}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <h3 className="modal-title">Paste JSON</h3>
+            <textarea
+              className="json-paste-area"
+              placeholder="Paste exported JSON here…"
+              value={jsonText}
+              onChange={e => { setJsonText(e.target.value); setJsonError(''); }}
+              autoFocus
+            />
+            {jsonError && <p className="json-error">{jsonError}</p>}
+            <div className="modal-actions">
+              <button className="modal-btn" onClick={() => setShowJsonImport(false)}>Cancel</button>
+              <button className="modal-btn modal-btn--primary" onClick={handleJsonImport} disabled={!jsonText.trim()}>Load</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
