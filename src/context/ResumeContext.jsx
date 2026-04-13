@@ -331,6 +331,11 @@ function reducer(state, action) {
       };
     }
 
+    case 'IMPORT_RESUME': {
+      const hist = pushHistory(state, 'Imported resume from PDF');
+      return { ...state, resume: action.resume, ...hist };
+    }
+
     case 'LOAD_STATE': {
       return action.state;
     }

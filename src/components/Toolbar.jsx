@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { useResume } from '../context/ResumeContext.jsx';
+const ImportPDFModal = lazy(() => import('./ImportPDFModal.jsx'));
 import ThemePanel from './panels/ThemePanel.jsx';
 import LayoutPanel from './panels/LayoutPanel.jsx';
 import FormatPanel from './panels/FormatPanel.jsx';
@@ -14,6 +15,7 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
   const accent = state.customAccent || 'var(--primary)';
   const [activePanel, setActivePanel] = useState(null);
   const [showConfig, setShowConfig] = useState(false);
+  const [showImport, setShowImport] = useState(false);
   const toolbarRef = useRef(null);
 
   function togglePanel(key) {
@@ -121,6 +123,11 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
           ⚙ Settings
         </button>
 
+        {/* Import */}
+        <button className="toolbar-btn" onClick={() => setShowImport(true)} title="Import from PDF">
+          ⬆ Import PDF
+        </button>
+
         {/* Download */}
         <button className="toolbar-btn toolbar-btn--primary" onClick={handleDownload}>
           ⬇ Download PDF
@@ -132,6 +139,13 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
 
       {/* Config popup */}
       {showConfig && <ConfigPanel onClose={() => setShowConfig(false)} />}
+
+      {/* Import PDF modal */}
+      {showImport && (
+        <Suspense fallback={null}>
+          <ImportPDFModal onClose={() => setShowImport(false)} />
+        </Suspense>
+      )}
     </div>
   );
 }

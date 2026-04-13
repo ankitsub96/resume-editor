@@ -65,7 +65,16 @@ function addLinkAnnotations(pdf, canvasEl, pageW, pageH) {
   });
 }
 
-async function buildPDF(documentSize, keywords = '', background = '#ffffff') {
+export const RESUME_MARKER = 'RE:';
+
+export function embedResumeData(pdf, resumeData) {
+  try {
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(resumeData))));
+    pdf.setProperties({ subject: RESUME_MARKER + encoded });
+  } catch {}
+}
+
+async function buildPDF(documentSize, keywords = '', background = '#ffffff', resumeData = null) {
   const el = document.getElementById('resume-canvas');
   if (!el) return null;
 
@@ -114,9 +123,15 @@ async function buildPDF(documentSize, keywords = '', background = '#ffffff') {
     // Add clickable link annotations over the image
     addLinkAnnotations(pdf, el, pageW, pageH);
 
-    if (keywords && keywords.trim()) {
-      pdf.setProperties({ keywords: keywords.trim() });
+    const props = {};
+    if (keywords && keywords.trim()) props.keywords = keywords.trim();
+    if (resumeData) {
+      try {
+        const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(resumeData))));
+        props.subject = RESUME_MARKER + encoded;
+      } catch {}
     }
+    if (Object.keys(props).length) pdf.setProperties(props);
 
     return pdf;
   } finally {
@@ -131,8 +146,9 @@ export async function generatePDFPreviewUrl(documentSize = 'a4', background = '#
   return URL.createObjectURL(blob);
 }
 
-export async function exportPDF(documentSize = 'a4', keywords = '', background = '#ffffff') {
-  const pdf = await buildPDF(documentSize, keywords, background);
+export async function exportPDF(documentSize = 'a4', keywords = '', background = '#ffffff', resumeData = null) {
+  const pdf = await buildPDF(documentSize, keywords, background, resumeData);
   if (!pdf) return;
-  pdf.save('Ankit_Dahiya_Resume.pdf');
+  const name = resumeData?.header?.name?.replace(/\s+/g, '_') || 'Resume';
+  pdf.save(`${name}_Resume.pdf`);
 }

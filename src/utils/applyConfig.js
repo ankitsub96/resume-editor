@@ -70,7 +70,7 @@ export function applyConfigToDOM(cfg, formatSpacing) {
 
   const tb = cfg.toolbar || {};
   document.querySelectorAll('.toolbar').forEach(el => {
-    el.style.background = tb.background || '';
+    // background is controlled by React's accent color state — don't override it
     el.style.height = tb.height || '';
   });
 

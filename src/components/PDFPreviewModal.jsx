@@ -31,7 +31,7 @@ export default function PDFPreviewModal({ onClose }) {
   async function handleDownload() {
     setDownloading(true);
     try {
-      await exportPDF(format.documentSize, format.pdfKeywords || '', bg);
+      await exportPDF(format.documentSize, format.pdfKeywords || '', bg, state.resume);
     } finally {
       setDownloading(false);
     }
