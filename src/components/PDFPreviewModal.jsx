@@ -13,7 +13,6 @@ export default function PDFPreviewModal({ onClose }) {
   const { format } = state;
   const [blobUrl, setBlobUrl] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [downloading, setDownloading] = useState(false);
   const urlRef = useRef(null);
 
   const bg = resolveBackground(
@@ -73,17 +72,6 @@ export default function PDFPreviewModal({ onClose }) {
       <div className="pdf-modal">
         <div className="pdf-modal-header">
           <span className="pdf-modal-title">PDF Preview</span>
-          <div className="pdf-modal-header-actions">
-            <button
-              className="pdf-footer-btn pdf-footer-btn--primary"
-              onClick={handleDownload}
-            >
-              ↓ Download PDF
-            </button>
-            <button className="pdf-modal-close" onClick={onClose}>
-              ×
-            </button>
-          </div>
         </div>
 
         <div className="pdf-modal-body">
@@ -117,23 +105,15 @@ export default function PDFPreviewModal({ onClose }) {
           </div>
         </div>
 
-        {/* <div className="pdf-modal-footer">
+        <div className="pdf-modal-footer">
           <button className="pdf-footer-btn" onClick={onClose}>Cancel</button>
-          <button
-            className="pdf-footer-btn pdf-footer-btn--print"
-            onClick={() => window.print()}
-            title="Prints the actual resume DOM — produces a text-layer PDF readable by ATS"
-          >
-            Print / ATS PDF
-          </button>
           <button
             className="pdf-footer-btn pdf-footer-btn--primary"
             onClick={handleDownload}
-            disabled={downloading}
           >
-            {downloading ? 'Generating…' : '↓ Download PDF'}
+            ↓ Download PDF
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );
