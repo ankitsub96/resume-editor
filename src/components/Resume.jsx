@@ -120,6 +120,25 @@ export default function Resume() {
             })}
           </div>
         )}
+
+        {format.pdfKeywords && (
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              fontSize: '1px',
+              lineHeight: '1px',
+              color: 'transparent',
+              userSelect: 'none',
+              pointerEvents: 'none',
+            }}
+          >
+            {format.pdfKeywords}
+          </div>
+        )}
       </div>
     </div>
   );
