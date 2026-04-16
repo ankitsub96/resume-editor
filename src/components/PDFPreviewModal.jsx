@@ -106,12 +106,14 @@ export default function PDFPreviewModal({ onClose }) {
         </div>
 
         <div className="pdf-modal-footer">
-          <button className="pdf-footer-btn" onClick={onClose}>Cancel</button>
+          <button className="pdf-footer-btn" onClick={onClose}>
+            Cancel
+          </button>
           <button
             className="pdf-footer-btn pdf-footer-btn--primary"
             onClick={handleDownload}
           >
-            ↓ Download PDF
+            ⬇ Download PDF
           </button>
         </div>
       </div>
