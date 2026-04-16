@@ -94,8 +94,8 @@ export default function GenericSection({ section }) {
                           onChange={(v) => updateItem(item.id, { period: v })}
                           placeholder="Date"
                         />
-                        <button className="item-remove-btn" onClick={() => removeItem(item.id)} title="Remove">×</button>
                       </div>
+                      <button className="item-remove-btn" onClick={() => removeItem(item.id)} title="Remove">×</button>
                     </div>
                     {item.bullets !== undefined && (
                       <BulletList

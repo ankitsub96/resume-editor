@@ -75,8 +75,8 @@ export default function WorkSection({ section }) {
                           <EditableText tag="span" className="item-location" value={item.location}
                             onChange={(v) => updateItem(item.id, { location: v })} placeholder="Location" />
                         </div>
-                        <button className="item-remove-btn" onClick={() => removeItem(item.id)}>×</button>
-                      </div>
+                        </div>
+                      <button className="item-remove-btn" onClick={() => removeItem(item.id)}>×</button>
                     </div>
                     <DndContext sensors={bulletSensors} collisionDetection={closestCenter} onDragEnd={(e) => moveBullet(item, e)}>
                       <SortableContext items={item.bullets.map((_, idx) => `wbullet-${item.id}-${idx}`)} strategy={verticalListSortingStrategy}>

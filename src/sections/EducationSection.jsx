@@ -84,8 +84,8 @@ export default function EducationSection({ section }) {
                             placeholder="Location"
                           />
                         </div>
-                        <button className="item-remove-btn" onClick={() => removeItem(item.id)} title="Remove">×</button>
-                      </div>
+                        </div>
+                      <button className="item-remove-btn" onClick={() => removeItem(item.id)} title="Remove">×</button>
                     </div>
                   </div>
                 )}

@@ -72,8 +72,8 @@ export default function ProjectsSection({ section }) {
                       <div className="item-header-right">
                         <EditableText tag="span" className="item-period" value={item.period}
                           onChange={(v) => updateItem(item.id, { period: v })} placeholder="Period" />
-                        <button className="item-remove-btn" onClick={() => removeItem(item.id)}>×</button>
                       </div>
+                      <button className="item-remove-btn" onClick={() => removeItem(item.id)}>×</button>
                     </div>
                     <BulletList item={item} onMove={moveBullet} onUpdate={updateBullet} onAdd={addBullet} onRemove={removeBullet} />
                   </div>
