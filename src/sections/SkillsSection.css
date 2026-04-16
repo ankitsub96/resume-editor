@@ -30,6 +30,13 @@
   white-space: nowrap;
 }
 
+@container (max-width: 200px) {
+  .skill-chip {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
 .skill-chip:hover .skill-remove { opacity: 1; }
 
 .skill-remove {

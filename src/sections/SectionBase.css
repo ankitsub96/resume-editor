@@ -13,7 +13,7 @@
 
 /* Colored block to the left of title text */
 .section-title-row::before {
-  content: '';
+  content: "";
   display: block;
   width: var(--section-accent-width, 6px);
   background: var(--primary-gradient, var(--primary));
@@ -42,6 +42,7 @@
 /* Item card */
 .section-item {
   position: relative;
+  container-type: inline-size;
 }
 
 .section-item:hover .item-remove-btn {
@@ -68,6 +69,20 @@
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
+}
+
+@container (max-width: 200px) {
+  .item-header {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .item-header-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .item-header-right > div {
+    align-items: flex-start !important;
+  }
 }
 
 .item-title {
@@ -109,7 +124,9 @@
   border-radius: 2px;
 }
 
-.item-remove-btn:hover { background: #fee; }
+.item-remove-btn:hover {
+  background: #fee;
+}
 
 /* Drag handles */
 .item-drag-handle {
@@ -123,8 +140,12 @@
   opacity: 0.25;
   transition: opacity 0.15s;
 }
-.item-drag-handle:active { cursor: grabbing; }
-.section-item:hover .item-drag-handle { opacity: 1; }
+.item-drag-handle:active {
+  cursor: grabbing;
+}
+.section-item:hover .item-drag-handle {
+  opacity: 1;
+}
 
 .bullet-drag {
   font-size: 0.75em;
@@ -136,8 +157,12 @@
   opacity: 0.25;
   transition: opacity 0.15s;
 }
-.bullet-drag:active { cursor: grabbing; }
-.bullet-item:hover .bullet-drag { opacity: 1; }
+.bullet-drag:active {
+  cursor: grabbing;
+}
+.bullet-item:hover .bullet-drag {
+  opacity: 1;
+}
 
 /* Bullet lists */
 .bullet-list {
@@ -159,7 +184,7 @@
 }
 
 .bullet-item::before {
-  content: '•';
+  content: "•";
   color: var(--primary);
   font-size: 0.9em;
   margin-top: 1px;
@@ -167,8 +192,12 @@
   order: 1;
 }
 
-.bullet-drag { order: 0; }
-.bullet-item > span:last-child { order: 2; }
+.bullet-drag {
+  order: 0;
+}
+.bullet-item > span:last-child {
+  order: 2;
+}
 
 .bullet-add {
   font-size: 0.68em;
@@ -179,7 +208,9 @@
   list-style: none;
 }
 
-.bullet-add:hover { color: var(--primary); }
+.bullet-add:hover {
+  color: var(--primary);
+}
 
 /* Add item button */
 .add-item-btn {
@@ -195,7 +226,9 @@
   transition: opacity 0.15s;
 }
 
-.add-item-btn:hover { opacity: 1; }
+.add-item-btn:hover {
+  opacity: 1;
+}
 
 /* Sidebar (left column) section styling */
 .column-left .item-title {

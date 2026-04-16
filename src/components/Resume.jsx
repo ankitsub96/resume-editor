@@ -174,7 +174,9 @@ function ResumeColumn({ side, sections, renderSection }) {
   return (
     <SortableContext items={sections.map(s => s.id)} strategy={verticalListSortingStrategy}>
       <div className={`column-${side} resume-column`}>
-        {sections.map(renderSection)}
+        <div className="column-inner">
+          {sections.map(renderSection)}
+        </div>
       </div>
     </SortableContext>
   );
