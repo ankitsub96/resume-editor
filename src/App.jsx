@@ -13,10 +13,9 @@ const PIN_THRESHOLD = 1320;
 export default function App() {
   const [showPDFPreview, setShowPDFPreview] = useState(false);
   const [pinned, setPinned] = useState(() => window.innerWidth >= PIN_THRESHOLD);
+  const [showSidebars, setShowSidebars] = useState(true);
 
-  useEffect(() => {
-    applyConfigOnStartup();
-  }, []);
+  useEffect(() => { applyConfigOnStartup(); }, []);
 
   useEffect(() => {
     function onResize() { setPinned(window.innerWidth >= PIN_THRESHOLD); }
@@ -24,13 +23,20 @@ export default function App() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  const sidebarsVisible = pinned && showSidebars;
+
   return (
     <div className="app-shell">
-      <Toolbar onDownload={() => setShowPDFPreview(true)} pinnedPanels={pinned} />
+      <Toolbar
+        onDownload={() => setShowPDFPreview(true)}
+        pinnedPanels={sidebarsVisible}
+        showSidebars={showSidebars}
+        onToggleSidebars={() => setShowSidebars(s => !s)}
+      />
       <div className="app-body">
-        {pinned && <ThemePanel pinned />}
+        {sidebarsVisible && <ThemePanel pinned />}
         <Resume />
-        {pinned && <FormatPanel pinned />}
+        {sidebarsVisible && <FormatPanel pinned />}
       </div>
       {showPDFPreview && (
         <Suspense fallback={null}>

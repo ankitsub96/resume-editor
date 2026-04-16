@@ -170,3 +170,10 @@
 }
 .pdf-footer-btn--primary:hover { background: var(--primary-dark); }
 .pdf-footer-btn--primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.pdf-footer-btn--print {
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+.pdf-footer-btn--print:hover { background: rgba(90, 122, 74, 0.07); }

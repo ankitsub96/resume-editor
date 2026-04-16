@@ -10,7 +10,7 @@ import './Toolbar.css';
 
 const PANEL_KEYS = ['themes', 'layout', 'format', 'history'];
 
-export default function Toolbar({ onDownload, pinnedPanels = false }) {
+export default function Toolbar({ onDownload, pinnedPanels = false, showSidebars = true, onToggleSidebars }) {
   const { state, dispatch, canUndo, canRedo } = useResume();
   const accent = state.customAccent || 'var(--primary)';
   const [activePanel, setActivePanel] = useState(null);
@@ -131,6 +131,17 @@ export default function Toolbar({ onDownload, pinnedPanels = false }) {
       </div>
 
       <div className="toolbar-right">
+        {/* Toggle sidebars (only shown when window is wide enough to pin them) */}
+        {onToggleSidebars && (
+          <button
+            className="toolbar-btn"
+            onClick={onToggleSidebars}
+            title={showSidebars ? 'Hide panels' : 'Show panels'}
+          >
+            {showSidebars ? '◧ Hide Panels' : '◨ Show Panels'}
+          </button>
+        )}
+
         {/* History */}
         <button
           className={`toolbar-btn ${activePanel === 'history' ? 'active' : ''}`}

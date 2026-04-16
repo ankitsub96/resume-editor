@@ -186,8 +186,11 @@
 .pdf-exporting [contenteditable][data-placeholder]:empty::before { content: none; }
 
 @media print {
-  .resume-wrapper { background: none; padding: 0; }
+  .resume-wrapper { background: white !important; padding: 0 !important; overflow: visible !important; margin: 0 !important; justify-content: flex-start !important; }
   .resume-canvas { box-shadow: none; }
-  .section-drag-handle, .column-divider { display: none !important; }
+  .add-item-btn, .item-remove-btn, .bullet-add,
+  .tag-input-field, .tag-remove, .section-drag-handle,
+  .drag-dot, .item-drag-handle, .bullet-drag,
+  .skill-remove, .skill-add-input, .column-divider { display: none !important; }
   [contenteditable][data-placeholder]:empty::before { content: none; }
 }

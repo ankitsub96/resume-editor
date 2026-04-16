@@ -10,3 +10,13 @@
   display: flex;
   overflow: hidden;
 }
+
+@media print {
+  .toolbar { display: none !important; }
+  .panel-drawer { display: none !important; }
+  .panel-sidebar { display: none !important; }
+  .pdf-overlay { display: none !important; }
+  .app-body { overflow: visible !important; background: white !important; }
+  .app-shell { height: auto !important; overflow: visible !important; background: white !important; }
+  body, html { background: white !important; margin: 0 !important; padding: 0 !important; }
+}

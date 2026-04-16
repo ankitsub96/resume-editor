@@ -19,8 +19,11 @@ export function restoreCanvas() {
   document.getElementById('resume-canvas')?.classList.remove(EXPORT_CLASS);
 }
 
+
 function prepareCanvas(canvas) {
   canvas.classList.add(EXPORT_CLASS);
+  // Hide the PDF modal overlay so it doesn't appear in the capture
+  document.querySelectorAll('.pdf-overlay').forEach(el => el.style.setProperty('visibility', 'hidden', 'important'));
 
   const photoEl = canvas.querySelector('.header-photo');
   const hasRealPhoto = !!photoEl?.querySelector('img');
@@ -28,6 +31,7 @@ function prepareCanvas(canvas) {
 
   return () => {
     canvas.classList.remove(EXPORT_CLASS);
+    document.querySelectorAll('.pdf-overlay').forEach(el => el.style.removeProperty('visibility'));
     if (photoEl && !hasRealPhoto) photoEl.style.visibility = '';
   };
 }
@@ -92,6 +96,11 @@ async function buildPDF(documentSize, keywords = '', background = '#ffffff', res
       useCORS: true,
       logging: false,
       backgroundColor: bg,
+      ignoreElements: (node) =>
+        node.classList?.contains('pdf-overlay') ||
+        node.classList?.contains('panel-drawer') ||
+        node.classList?.contains('panel-sidebar') ||
+        node.classList?.contains('toolbar'),
     });
 
     const imgData = captured.toDataURL('image/jpeg', 0.98);
