@@ -72,6 +72,17 @@ export default function PDFPreviewModal({ onClose }) {
       <div className="pdf-modal">
         <div className="pdf-modal-header">
           <span className="pdf-modal-title">PDF Preview</span>
+          <div className="pdf-modal-header-actions">
+            <button
+              className="pdf-footer-btn pdf-footer-btn--primary"
+              onClick={handleDownload}
+            >
+              ↓ Download PDF
+            </button>
+            <button className="pdf-modal-close" onClick={onClose}>
+              ×
+            </button>
+          </div>
         </div>
 
         <div className="pdf-modal-body">
