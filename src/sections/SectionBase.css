@@ -32,12 +32,6 @@
   min-width: 20px;
   padding: 3px 0 5px;
 }
-[data-gradient-accent] .section-title {
-  background-image: var(--primary-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
 
 .section-items {
   display: flex;

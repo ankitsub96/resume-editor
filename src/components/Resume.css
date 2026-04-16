@@ -183,8 +183,11 @@
   pointer-events: none;
 }
 
+.pdf-exporting [contenteditable][data-placeholder]:empty::before { content: none; }
+
 @media print {
   .resume-wrapper { background: none; padding: 0; }
   .resume-canvas { box-shadow: none; }
   .section-drag-handle, .column-divider { display: none !important; }
+  [contenteditable][data-placeholder]:empty::before { content: none; }
 }

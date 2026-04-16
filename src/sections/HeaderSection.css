@@ -49,19 +49,6 @@
   display: block;
   min-width: 40px;
 }
-[data-gradient-accent] .header-name {
-  background-image: var(--primary-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-[data-gradient-accent] .header-name:focus,
-[data-gradient-accent] .header-name:focus-within {
-  background-image: none;
-  -webkit-background-clip: unset;
-  background-clip: unset;
-  color: var(--primary);
-}
 
 .header-title {
   font-size: 0.88em;
