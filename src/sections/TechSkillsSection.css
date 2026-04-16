@@ -8,9 +8,15 @@
   display: flex;
   align-items: flex-start;
   gap: 4px;
+  border-radius: 3px;
+}
+
+.tech-skill-row:hover {
+  outline: 1px solid color-mix(in srgb, var(--primary, #888) 40%, transparent);
 }
 
 .tech-skill-row:hover .item-remove-btn { opacity: 1; }
+.tech-skill-row:hover .item-drag-handle { opacity: 1; color: #444; }
 
 .tech-skill-inner {
   flex: 1;

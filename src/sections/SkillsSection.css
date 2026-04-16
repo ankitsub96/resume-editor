@@ -13,7 +13,7 @@
   user-select: none;
   transition: opacity 0.15s;
 }
-.drag-dot:hover { opacity: 1; }
+.drag-dot:hover { opacity: 1; color: #222; }
 .drag-dot:active { cursor: grabbing; opacity: 1; }
 
 .skill-chip {
