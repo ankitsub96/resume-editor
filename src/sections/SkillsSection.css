@@ -13,8 +13,14 @@
   user-select: none;
   transition: opacity 0.15s;
 }
-.drag-dot:hover { opacity: 1; color: #222; }
-.drag-dot:active { cursor: grabbing; opacity: 1; }
+.drag-dot:hover {
+  opacity: 1;
+  color: #222;
+}
+.drag-dot:active {
+  cursor: grabbing;
+  opacity: 1;
+}
 
 .skill-chip {
   display: inline-flex;
@@ -31,13 +37,32 @@
 }
 
 @container (max-width: 200px) {
+  /* .skills-chip-list {
+    line-height: 1.9;
+  }
   .skill-chip {
+    display: inline;
     white-space: normal;
     word-break: break-word;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    padding: 2px 7px;
+  } */
+  .skills-chip-list {
+    display: block;
+  }
+  .skill-chip {
+    display: inline-flex;
+    white-space: normal;
+    word-break: break-word;
+    width: auto;
+    margin-bottom: var(--item-gap, 4px);
   }
 }
 
-.skill-chip:hover .skill-remove { opacity: 1; }
+.skill-chip:hover .skill-remove {
+  opacity: 1;
+}
 
 .skill-remove {
   opacity: 0;
@@ -53,7 +78,9 @@
   flex-shrink: 0;
 }
 
-.skill-remove:hover { opacity: 1; }
+.skill-remove:hover {
+  opacity: 1;
+}
 
 .skill-label {
   cursor: text;
@@ -66,7 +93,7 @@
   font-weight: 600;
   padding: 3px 9px;
   border-radius: 3px;
-  border: 1.5px solid rgba(255,255,255,0.5);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
   outline: none;
   min-width: 60px;
   width: auto;
@@ -83,5 +110,10 @@
   width: 90px;
 }
 
-.skill-add-input::placeholder { color: #bbb; }
-.skill-add-input:focus { border-bottom-color: var(--primary); color: #333; }
+.skill-add-input::placeholder {
+  color: #bbb;
+}
+.skill-add-input:focus {
+  border-bottom-color: var(--primary);
+  color: #333;
+}
