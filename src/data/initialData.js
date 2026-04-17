@@ -1,9 +1,9 @@
 export const initialResume = {
   header: {
     name: "Ankit Dahiya",
-    title: "Senior Full-Stack Developer",
+    title: "Senior Software Engineer",
     summary:
-      "Fulls stack developer with a keen interest in System Design and have successfully delivered multiple projects single-handedly, including Bl Tools highly customized payment solutions. My passion for innovative problem-solving and collaboration ensures I deliver efficient and scalable solutions.",
+      "Senior Software Engineer with 5+ years building distributed, high-throughput backend systems — shipped a 50k+ DAU real-time collaboration platform (0→1) and payment infrastructure processing ₹30–40 Cr annually. Deep in event-driven architecture, distributed systems, and full-stack delivery. Led teams, drove AI integration, and scaled products.",
     photo: null,
     contacts: [
       {
@@ -44,13 +44,13 @@ export const initialResume = {
       type: "projects",
       title: "Projects",
       visible: true,
-      column: "left",
+      column: "right",
       items: [
         {
           id: "proj-1",
           title: "Real-Time Collaboration Engine",
           subtitle: "AWS AppSync, Lambda, S3, Chime, RabbitMQ, WebSockets",
-          period: "",
+          period: "2025 – Present",
           bullets: [
             "Designed event-driven microservices architecture handling 50k+ concurrent connections with sub-200ms message delivery",
             "Built unified notification system supporting real-time (WebSocket), async (push/email), and VoIP across multi-device, multi-platform",
@@ -61,7 +61,7 @@ export const initialResume = {
           id: "proj-2",
           title: "AI-Powered Meeting Intelligence",
           subtitle: "AWS Transcribe, Elasticsearch, Node.js, PostgreSQL",
-          period: "",
+          period: "2025 – Present",
           bullets: [
             "Built end-to-end meeting pipeline — recording, transcription, and NLP-based extraction of agendas, MOM, and action items",
             "Designed intelligent search layer over meeting transcripts using Elasticsearch with fuzzy matching and contextual ranking",
@@ -72,7 +72,7 @@ export const initialResume = {
           id: "proj-3",
           title: "Multi-Gateway Payment Platform",
           subtitle: "Node.js, PostgreSQL, MongoDB, RabbitMQ",
-          period: "",
+          period: "2021 – 2025",
           bullets: [
             "Architected payment orchestration layer supporting 3+ gateways with online, offline, and device-based collection flows",
             "Built reconciliation engine with automated mismatch detection across gateway responses, bank settlements, and internal ledger",
@@ -83,22 +83,22 @@ export const initialResume = {
           id: "proj-4",
           title: "Workforce Management System",
           subtitle: "AWS Lambda, Docker, ECS, Socket.IO, PostgreSQL",
-          period: "",
+          period: "2025 – Present",
           bullets: [
-            "Built geo-fenced attendance system with real-time location validation and server-side anti-spoofing checks",
-            "Designed policy-driven leave engine with configurable rules, approval chains, and payroll integration",
-            "Implemented JIRA-style task allocation module with workload balancing and productivity analytics",
+            "Built geo-fenced attendance system with real-time location validation for 10,000+ employees across 50+ client sites, with server-side anti-spoofing checks",
+            "Designed policy-driven leave engine with configurable approval chains and payroll integration, eliminating manual HR processing for 20+ leave types",
+            "Implemented JIRA-style task allocation module tracking 500+ concurrent tasks, with workload balancing and per-team productivity analytics",
           ],
         },
         {
           id: "proj-5",
           title: "Multi-Tenant BI & Dashboarding Platform",
           subtitle: "ReactJS, PostgreSQL, MySQL, MongoDB",
-          period: "",
+          period: "2021 – 2025",
           bullets: [
-            "Built drag-and-drop dashboard builder supporting 20+ chart types with cross-database query engine (PostgreSQL, MySQL, MongoDB)",
-            "Designed tenant isolation at query and data layer, supporting row-level and schema-level multi-tenancy",
-            "Optimized complex analytical queries reducing report generation from minutes to seconds",
+            "Built drag-and-drop dashboard builder supporting 20+ chart types with cross-database query engine (PostgreSQL, MySQL, MongoDB) for 15+ enterprise tenants",
+            "Designed tenant isolation at query and data layer with row-level and schema-level multi-tenancy, preventing data leaks across clients",
+            "Optimized complex analytical queries reducing report generation from ~3 min to under 10 sec on datasets with millions of rows",
           ],
         },
       ],
@@ -108,7 +108,7 @@ export const initialResume = {
       type: "work",
       title: "Work Experience",
       visible: true,
-      column: "left",
+      column: "right",
       items: [
         {
           id: "work-1",
@@ -143,8 +143,8 @@ export const initialResume = {
           period: "12/2020 – 07/2021",
           location: "Delhi",
           bullets: [
-            "Delivered core API and frontend features for a video-tech platform, improving feature release cadence by 2x",
-            "Collaborated cross-functionally with product and design to ship user-facing features on tight timelines",
+            "Built and shipped REST APIs and React frontend features for a video-tech SaaS platform, cutting release cycle from bi-weekly to weekly",
+            "Integrated third-party video streaming SDKs and authored reusable component library adopted across 4 product teams",
           ],
         },
       ],
@@ -154,18 +154,18 @@ export const initialResume = {
       type: "skills",
       title: "Core Skills",
       visible: true,
-      column: "right",
+      column: "left",
       items: [
-        { id: "sk-1", label: "System Design" },
-        { id: "sk-2", label: "Auth & RBAC" },
-        { id: "sk-3", label: "Data Modeling" },
-        { id: "sk-4", label: "Serverless" },
-        { id: "sk-5", label: "Caching Strategies" },
-        { id: "sk-6", label: "Event Driven Architecture" },
-        { id: "sk-7", label: "Latency Optimization" },
-        { id: "sk-8", label: "Debugging" },
-        { id: "sk-9", label: "DevOps" },
-        { id: "sk-10", label: "Containerization" },
+        { id: "sk-1", label: "System Design (HLD/LLD)" },
+        { id: "sk-2", label: "Auth, RBAC & IAM" },
+        { id: "sk-3", label: "Schema & Data Modeling" },
+        { id: "sk-4", label: "AWS Serverless (Lambda, AppSync)" },
+        { id: "sk-5", label: "Redis & Caching" },
+        { id: "sk-6", label: "Event-Driven (RabbitMQ, S3)" },
+        { id: "sk-7", label: "Performance & Latency Tuning" },
+        { id: "sk-8", label: "Technical Leadership" },
+        { id: "sk-9", label: "CI/CD & DevOps" },
+        { id: "sk-10", label: "Docker & Containerization" },
       ],
     },
     {
@@ -173,7 +173,7 @@ export const initialResume = {
       type: "techSkills",
       title: "Technical Skills",
       visible: true,
-      column: "right",
+      column: "left",
       items: [
         {
           id: "tech-1",
@@ -198,7 +198,7 @@ export const initialResume = {
       type: "education",
       title: "Education",
       visible: true,
-      column: "right",
+      column: "left",
       items: [
         {
           id: "edu-1",
