@@ -32,6 +32,7 @@ export default function LayoutPanel({ onClose }) {
   const [tab, setTab] = useState('presets');
 
   const { layout, resume } = state;
+  const isHBS = (layout.template ?? 'novoresume') === 'hbs';
   const sections = resume.sections;
 
   const existingTypes = sections.map((s) => s.type);
@@ -83,14 +84,16 @@ export default function LayoutPanel({ onClose }) {
         <button className="panel-close" onClick={onClose}>×</button>
       </div>
 
-      {/* Tab bar */}
-      <div className="layout-tabs">
-        <button className={`layout-tab ${tab === 'presets' ? 'active' : ''}`} onClick={() => setTab('presets')}>Presets</button>
-        <button className={`layout-tab ${tab === 'custom' ? 'active' : ''}`} onClick={() => setTab('custom')}>Custom</button>
-      </div>
+      {/* Tab bar — hidden for single-column templates like HBS */}
+      {!isHBS && (
+        <div className="layout-tabs">
+          <button className={`layout-tab ${tab === 'presets' ? 'active' : ''}`} onClick={() => setTab('presets')}>Presets</button>
+          <button className={`layout-tab ${tab === 'custom' ? 'active' : ''}`} onClick={() => setTab('custom')}>Custom</button>
+        </div>
+      )}
 
       <div className="panel-body">
-        {tab === 'presets' && (
+        {tab === 'presets' && !isHBS && (
           <>
             <div className="preset-cards">
               {PRESETS.map((p) => (
@@ -130,7 +133,40 @@ export default function LayoutPanel({ onClose }) {
           </>
         )}
 
-        {tab === 'custom' && (
+        {/* HBS: single vertical section list */}
+        {isHBS && (
+          <>
+            <div className="custom-col-box" style={{ width: '100%' }}>
+              <div className="custom-col-label">Sections</div>
+              {sections.map((s) => {
+                const reg = SECTION_REGISTRY[s.type];
+                return (
+                  <div key={s.id} className="section-chip">
+                    <span className="section-chip-icon">{reg?.icon ?? '§'}</span>
+                    <span className="section-chip-label">{s.title}</span>
+                    <button className="chip-remove" title="Remove" onClick={() => removeSection(s.id)}>×</button>
+                  </div>
+                );
+              })}
+            </div>
+
+            {addableTypes.length > 0 && (
+              <>
+                <p className="pool-label">Add Section</p>
+                <div className="pool-chips">
+                  {addableTypes.map((reg) => (
+                    <button key={reg.type} className="pool-chip" onClick={() => addSection(reg)}>
+                      {reg.icon} {reg.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </>
+        )}
+
+        {/* Two-column custom tab */}
+        {tab === 'custom' && !isHBS && (
           <>
             <label className="toggle-row" style={{ marginBottom: 10 }}>
               <input type="checkbox" checked={layout.mode === 'one-column'} onChange={() => setMode(layout.mode === 'one-column' ? 'two-column' : 'one-column')} />
