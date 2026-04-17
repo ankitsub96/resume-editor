@@ -20,7 +20,7 @@ Inline editing, theme/layout switching, drag-drop reordering, PDF export.
 ```
 src/
 ├── main.jsx                          # Entry — wraps App in ResumeProvider
-├── App.jsx / App.css                 # Shell: mounts Toolbar + Resume + PDFPreviewModal
+├── App.jsx / App.css                 # Shell: Toolbar + (TemplatesPage | sidebars + Resume) + PDFPreviewModal
 ├── index.css                         # CSS variables (:root), global reset
 ├── config.js                         # Central config object + loadConfig/saveConfigOverride/resetConfig
 ├── context/
@@ -28,7 +28,9 @@ src/
 ├── data/
 │   └── initialData.js               # Ankit Dahiya's resume pre-populated
 ├── themes/
-│   └── themes.js                    # 8 theme objects → CSS variable maps + applyTheme()
+│   └── themes.js                    # 16 theme objects → CSS variable maps + applyTheme()
+├── templates/
+│   └── templateRegistry.js          # TEMPLATE_REGISTRY — template keys, names, layoutPayload
 ├── sections/
 │   ├── sectionRegistry.js           # SECTION_REGISTRY + getAddableTypes()
 │   ├── renderers.js                 # renderer-key → React component map
@@ -41,21 +43,26 @@ src/
 │   ├── WorkSection.jsx              # Job cards + bullet drag reorder
 │   └── GenericSection.jsx           # Fallback: Certificates, Languages, Achievements, etc.
 ├── components/
-│   ├── Toolbar.jsx / Toolbar.css    # Top bar — panel toggles, undo/redo, download
+│   ├── Toolbar.jsx / Toolbar.css    # Top bar — panel toggles, Files panel, undo/redo, download
 │   ├── Resume.jsx / Resume.css      # Canvas — two/one-column, column divider drag, section DnD
+│   ├── TemplatesPage.jsx / .css     # Full-page template browser with visual preview cards
+│   ├── ImportPDFModal.jsx / .css    # Modal: drop PDF → parse → preview → load resume
+│   ├── TagInput.jsx / .css          # Badge-style tag editor [{id, label}] with Enter/comma/backspace
 │   ├── EditableText.jsx             # contentEditable wrapper, onBlur saves, Enter/Backspace hooks
 │   ├── SortableItem.jsx             # @dnd-kit render-prop wrapper for drag handles
-│   ├── PDFPreviewModal.jsx / .css   # Modal: iframe preview + SEO keywords + download
+│   ├── PDFPreviewModal.jsx / .css   # Modal: html2canvas preview iframe + SEO keywords + print download
 │   └── panels/
-│       ├── Panel.css                # Shared panel styles
-│       ├── ThemePanel.jsx           # Accent swatches, custom color pickers, bg, chip text color
+│       ├── Panel.css                # Shared panel + sidebar styles
+│       ├── ThemePanel.jsx / .css    # Accent swatches, custom color pickers, bg, chip text color
 │       ├── LayoutPanel.jsx          # Presets tab + Custom tab (section management)
-│       ├── FormatPanel.jsx          # Font, spacing, doc size, list labels
+│       ├── FormatPanel.jsx          # Font, font size, spacing, side padding, doc size, list labels
 │       ├── HistoryPanel.jsx         # Side drawer — history list, click to jump
-│       └── ConfigPanel.jsx          # Full config editor — sliders, color pickers, JSON paste
+│       └── ConfigPanel.jsx / .css   # Full config editor — sliders, color pickers, JSON paste
 └── utils/
     ├── nanoid.js                    # Tiny ID generator
-    └── pdfExport.js                 # html2canvas + jsPDF, resolveBackground()
+    ├── applyConfig.js               # applyConfigToDOM() + applyConfigOnStartup() — DOM CSS var application
+    ├── pdfExport.js                 # html2canvas + jsPDF preview; window.print() download; link annotations
+    └── pdfImport.js                 # pdfjs-dist text extraction + anchor-cluster heuristic parser
 ```
 
 ---
@@ -90,26 +97,38 @@ All 12 types have `addable: true` — they appear in the "Add Section" pool if n
 ## Features
 
 ### Toolbar
-Left: brand label "Resume Editor"
-Center: **↩ Undo** (disabled when no history) · **Redo ↪** (disabled at head) · separator · **⊞ Layout** · **◑ Themes** · **≡ Format**
-Right: **🕐 History** · **⚙** (config) · **↓ Download PDF** (primary button)
+Toolbar `background` = current accent color (CSS var `--primary` or `customAccent`).
+
+Left: **Resume Editor** brand · **⊞ Templates** / **← Editor** toggle (switches to TemplatesPage)
+Center: **⟲ Undo** · **Redo ⟳** · separator · **▤ Layout** · **◑ Colors** (hidden when sidebars pinned) · **☰ Format** (hidden when sidebars pinned)
+Right: **◧ Hide Panels / ◨ Show Panels** (only when window ≥ 1320px) · **◷ History** · **⚙ Settings** · **⇅ Files** · **⬇ Download PDF** (primary)
 
 - Clicking a panel button toggles its dropdown; clicking another closes the current one
 - Outside click closes all panels except History (History stays open until explicitly closed)
-- History and Config open as overlays separate from the dropdown anchor system
+- History and Config/Settings open as overlays separate from the dropdown anchor system
+- Colors and Format buttons hidden from toolbar when pinned as sidebars (wide screen ≥ 1320px)
+
+**Files panel** (dropdown from **⇅ Files**):
+- **Export Data** — copies full state JSON to clipboard
+- **Import Data** — opens inline JSON paste modal → dispatches `LOAD_STATE`
+- **Import File** — opens `ImportPDFModal` (lazy-loaded) to load resume from PDF
 
 ---
 
 ### Theme Panel
+Mounts as a **dropdown** from the **◑ Colors** toolbar button, or as a **pinned left sidebar** when window ≥ 1320px (prop `pinned`).
+
 **Accent Color**
-- 8 preset swatches: Olive Green (default), Ocean Blue, Ruby Red, Royal Purple, Sunset Orange, Teal, Charcoal Dark, Minimal Gray
+- 16 preset swatches: Olive Green (default), Ocean Blue, Ruby Red, Royal Purple, Sunset Orange, Teal, Charcoal Dark, Minimal Gray, Rose Gold, Indigo Dusk, Forest, Burgundy, Midnight, Copper, Emerald, Slate Blue
 - Custom color swatch (RgbaColorPicker) — opens popup with hex/rgba text input + opacity
+- Gradient support: custom accent can be a `linear-gradient(…)` — sets `--primary-gradient` CSS var and `data-gradient-accent` attribute on `<html>`
 - "Reset to theme" button appears when a custom accent is active
 - Applies instantly via `--primary`, `--primary-dark`, `--accent` CSS vars
 
 **Background**
 - 4 presets: White `#ffffff`, Off-white `#fafaf8`, Warm `#fdf8f0`, Cool gray `#f5f6f8`
-- Custom color swatch with opacity — sets `--canvas-bg` CSS var
+- Custom color swatch with opacity — supports gradients — sets `--canvas-bg` CSS var
+- Auto-derives `--resume-text`, `--resume-text-muted`, `--resume-border` from bg luminance
 
 **Skill Chip Text**
 - Three quick buttons: Auto (contrast-computed from accent) / White / Dark
@@ -136,10 +155,16 @@ Right: **🕐 History** · **⚙** (config) · **↓ Download PDF** (primary but
 ---
 
 ### Format Panel
+Mounts as a **dropdown** from the **☰ Format** toolbar button, or as a **pinned right sidebar** when window ≥ 1320px (prop `pinned`).
+
 - **Font** — `<select>`: Inter · Georgia · Merriweather · Roboto Mono
-- **Content Spacing** — range slider 1–10 (Min → Max), maps to `--section-gap`, `--item-gap`, `--line-height`
+- **Font Size** — step slider 10–18px → sets `--font-size-base` CSS var
+- **Content Spacing** — step slider 1–15 (Min → Max), maps to `--section-gap`, `--item-gap`, `--line-height`
+- **Side Padding** — step slider 0–60px → sets `--content-padding-h` CSS var
 - **Document Size** — radio: A4 / US Letter (changes canvas width + PDF format)
 - **Show List Labels** — checkbox (shows/hides label prefix before bullet lists)
+
+All sliders use a `StepSlider` component with ‹ / › arrow buttons, a dot-track, and a live value badge.
 
 ---
 
@@ -251,24 +276,83 @@ Right: **🕐 History** · **⚙** (config) · **↓ Download PDF** (primary but
 
 ---
 
+### Pinned Sidebars (App.jsx)
+- When `window.innerWidth >= 1320` (`PIN_THRESHOLD`), `pinned=true`
+- `ThemePanel pinned` mounts left of `Resume`; `FormatPanel pinned` mounts right
+- **◧ Hide Panels / ◨ Show Panels** toolbar button toggles visibility when pinned
+- When pinned, **◑ Colors** and **☰ Format** toolbar buttons are hidden (sidebars are always visible)
+
+---
+
+### Templates (`templateRegistry.js` + `TemplatesPage`)
+**`TEMPLATE_REGISTRY`** — array of template descriptors:
+```js
+{ key, name, desc, tags[], layoutPayload }
+```
+`layoutPayload` is merged into `layout` state via `SET_LAYOUT`. Currently two templates:
+
+| Key | Name | Layout | Description |
+|---|---|---|---|
+| `novoresume` | Novoresume | two-column | Sidebar layout, modern/technical |
+| `hbs` | HBS Classic | one-column | Traditional single-column, business |
+
+**`TemplatesPage`** — full-page view (replaces Resume canvas):
+- Grid of cards with CSS-drawn preview thumbnails (`NovoresumePreview`, `HBSPreview`)
+- Active template highlighted with `✓ Active` badge
+- Click card → `SET_LAYOUT` with `entry.layoutPayload` → closes page back to editor
+- Add new template: add entry to `TEMPLATE_REGISTRY` + preview component to `PREVIEWS` map in `TemplatesPage.jsx`
+
+---
+
+### PDF Import (`ImportPDFModal` + `pdfImport.js`)
+**`ImportPDFModal`** — stages: `upload → parsing → preview → (paste fallback)`
+1. **Upload** — drag-drop zone or file picker (`application/pdf`)
+2. **Parsing** — calls `importPDF(file)` from `pdfImport.js`; spinner shown
+3. **No text layer** → falls back to **Paste** stage (manual text entry → `parseTextToResume`)
+4. **Preview** — shows parsed name, title, summary, contacts, section counts; confidence badge (exact match vs heuristic)
+5. **Load** — dispatches `IMPORT_RESUME` (replaces `resume` in state)
+
+**`pdfImport.js`** (uses `pdfjs-dist`):
+- `importPDF(file)` — extracts text from PDF; detects `RE:` marker in `subject` for exact editor exports
+- `parseTextToResume(lines)` — anchor-cluster heuristic parser:
+  - Classifies each line: `section | period | bullet | contact | separator | short | long`
+  - Maps section headers via `SECTION_MAP` regexes to section types
+  - Extracts contacts with `EMAIL_RE`, `PHONE_RE`, `LINKEDIN_RE`, `GITHUB_RE`
+  - Groups lines into items within each section
+
+---
+
 ### PDF Export (`pdfExport.js` + `PDFPreviewModal`)
 
-**Flow:** Download PDF button → `PDFPreviewModal` opens → generates preview on mount
+**Preview flow:** Download PDF button → `PDFPreviewModal` opens → `generatePDFPreviewUrl()` on mount → iframe
 
-**`buildPDF(documentSize, keywords, background)`**
-1. `prepareCanvas()` hides editing controls + column divider + photo placeholder (if no image)
-2. `html2canvas(el, { scale:2, backgroundColor: bg })` captures `#resume-canvas`
-3. `jsPDF` created at A4 or Letter size
-4. Each PDF page: `pdf.rect(0,0,pageW,pageH,'F')` fills background, then `pdf.addImage()`
-5. `pdf.setProperties({ keywords })` embeds SEO metadata
-6. `restore()` unhides controls
+**Download flow:** **⬇ Download PDF** in modal footer → `window.print()` (real text-layer PDF via browser print dialog)
 
-**PDFPreviewModal**
-- SEO Keywords textarea — stored in `format.pdfKeywords`, embedded in PDF metadata (invisible, ATS-readable)
-- Iframe shows live PDF blob URL
-- Loading spinner while generating
-- Cancel / ↓ Download PDF buttons
-- Filename from `config.pdf.filename` (`Ankit_Dahiya_Resume.pdf`)
+**`generatePDFPreviewUrl(documentSize, background)`**
+1. `prepareCanvas()` adds `.pdf-exporting` class; hides `.pdf-overlay`, `.panel-drawer`, `.panel-sidebar`, `.toolbar` from capture; hides empty photo placeholder
+2. `html2canvas(el, { scale:2 })` captures `#resume-canvas`
+3. `jsPDF` created at A4 or Letter; fills background rect; `pdf.addImage()` per page (>2mm threshold avoids blank tail page)
+4. `addLinkAnnotations()` — walks all `<a href>` elements in canvas DOM and registers jsPDF link annotations (clickable links in the preview PDF)
+5. `embedResumeData()` — encodes full `resume` state as base64 JSON in PDF `subject` field with `RE:` marker (enables exact round-trip import)
+6. Returns blob URL for iframe
+
+**`exportPDF()`** — same pipeline; calls `pdf.save()` with filename derived from `resume.header.name`
+
+**`handleDownload()` in `PDFPreviewModal`**
+- Injects `@page { size: A4/Letter portrait; margin: 0 }` style tag
+- Sets `document.title` to `"${name}'s Resume"` for the print dialog filename
+- Calls `window.print()` → browser generates real-text PDF
+- Restores title + removes style on `afterprint` event
+
+**PDFPreviewModal layout**
+- Left sidebar: SEO Keywords textarea (`SET_PDF_KEYWORDS` action — no history entry)
+- Right: iframe preview (html2canvas-based blob)
+- Footer: Cancel · ⬇ Download PDF
+- ATS keywords also embedded as an invisible `1px` absolutely-positioned div in the resume canvas DOM
+
+**`applyConfig.js`**
+- `applyConfigToDOM(cfg, formatSpacing)` — directly sets inline styles on DOM nodes (typography, spacing, header, canvas, toolbar CSS vars). Called by `ConfigPanel` on every change.
+- `applyConfigOnStartup()` — called once in `App.jsx` `useEffect` to re-apply saved config overrides after refresh.
 
 ---
 
@@ -288,30 +372,33 @@ Right: **🕐 History** · **⚙** (config) · **↓ Download PDF** (primary but
     header: { name, title, summary, photo, contacts[] },
     sections: [{ id, type, title, visible, column, items[] }]
   },
-  theme: 'oliveGreen',          // key into THEMES map
-  customAccent: null,           // null = theme default | '#xxxxxx' = override
+  theme: 'oliveGreen',          // key into THEMES map (16 options)
+  customAccent: null,           // null | '#xxxxxx' | 'linear-gradient(…)'
   customAccentOpacity: 100,     // 0–100
-  canvasBackground: '#ffffff',
+  canvasBackground: '#ffffff',  // hex | 'linear-gradient(…)'
   canvasBackgroundOpacity: 100,
   chipTextColor: 'auto',        // 'auto' | '#xxxxxx'
   layout: {
+    template: 'novoresume',     // 'novoresume' | 'hbs' — from templateRegistry
     mode: 'two-column' | 'one-column',
     preset: 'classic' | 'standard' | 'modern' | 'custom',
     showTitle: true,
     showSummary: true,
     showPhoto: true,
-    leftRatioPct: 58,           // draggable divider position (15–85)
+    leftRatioPct: 58,           // draggable divider position (10–90)
   },
   format: {
-    spacing: 5,                 // 1–10 slider
-    documentSize: 'a4',        // 'a4' | 'letter'
+    spacing: 5,                 // 1–15 slider
+    fontSize: 13,               // px, 10–18 slider → --font-size-base
+    contentPaddingH: 14,        // px, 0–60 slider → --content-padding-h
+    documentSize: 'a4',         // 'a4' | 'letter'
     showListLabels: false,
     font: 'Inter',
-    pdfKeywords: '',            // embedded in PDF metadata
+    pdfKeywords: '',            // embedded in PDF metadata (not in undo history)
   },
   history: [{ id, timestamp, label, section, snapshot }],
   historyIndex: number,
-  _version: 4                   // bump to invalidate stale localStorage
+  _version: 4                   // bump STATE_VERSION in ResumeContext.jsx to invalidate
 }
 ```
 
@@ -343,7 +430,9 @@ Right: **🕐 History** · **⚙** (config) · **↓ Download PDF** (primary but
 | `UNDO` | — | Steps back in history |
 | `REDO` | — | Steps forward in history |
 | `HISTORY_JUMP` | `index` | Restores snapshot at arbitrary history index |
-| `LOAD_STATE` | `state` | Full state replacement (localStorage restore) |
+| `IMPORT_RESUME` | `resume` | Replaces `resume` (header + sections) from PDF import; pushes history |
+| `SET_PDF_KEYWORDS` | `value` | Sets `format.pdfKeywords`; no history entry |
+| `LOAD_STATE` | `state` | Full state replacement (JSON import); pushes "Loaded from JSON" history |
 
 ### Layout Presets
 
@@ -373,14 +462,20 @@ Set on `:root` by JS — never hard-coded in components:
 | Variable | Set by | Value |
 |---|---|---|
 | `--primary`, `--primary-dark`, `--accent` | theme / customAccent | theme color |
+| `--primary-gradient` | customAccent (gradient) | gradient string; `data-gradient-accent` attr set on `<html>` |
 | `--sidebar-bg`, `--sidebar-text`, `--text-light` | theme | defined but not applied in CSS (available for custom use) |
-| `--canvas-bg` | canvasBackground + opacity | canvas background color |
+| `--canvas-bg` | canvasBackground + opacity | canvas background (hex or gradient) |
+| `--resume-text` | canvasBackground luminance | `#111` or `#fff` for text contrast |
+| `--resume-text-muted` | canvasBackground | `rgba(0,0,0,0.45)` or `rgba(255,255,255,0.55)` |
+| `--resume-border` | canvasBackground | `rgba(0,0,0,0.1)` or `rgba(255,255,255,0.15)` |
 | `--chip-text` | chipTextColor (auto = contrast of --primary) | skill chip text color |
 | `--left-col`, `--right-col` | leftRatioPct | e.g. `58%` / `42%` |
-| `--section-gap` | format.spacing (1–10) | `0.4 + (s-1)*0.18 rem` |
+| `--section-gap` | format.spacing (1–15) | `0.4 + (s-1)*0.18 rem` |
 | `--item-gap` | format.spacing | `0.3 + (s-1)*0.1 rem` |
 | `--line-height` | format.spacing | `1.3 + (s-1)*0.05` |
 | `--font-resume` | format.font | e.g. `Inter, system-ui, sans-serif` |
+| `--font-size-base` | format.fontSize | e.g. `13px` |
+| `--content-padding-h` | format.contentPaddingH | e.g. `14px` |
 | `--section-accent-width` | ConfigPanel sectionTitle | left bar width on section titles |
 | `--section-accent-margin` | ConfigPanel sectionTitle | margin after accent bar |
 | `--toolbar-height` | static | `52px` |
@@ -396,26 +491,27 @@ Canvas width set as inline style on `#resume-canvas`: `794px` (A4) or `816px` (L
 ## Verification
 1. `npm run dev` → localhost:5180 (or next port)
 2. Click any text → inline edit, blur saves
-3. Toolbar **Themes** → accent swatch → CSS vars change live
-4. Theme → custom accent color picker → hex input works
-5. Theme → Background → preset + custom color picker
-6. Theme → Skill Chip Text → auto/white/dark/custom
-7. Toolbar **Layout → Presets** → Classic/Standard/Modern → columns rearrange
+3. Toolbar **◑ Colors** → accent swatch (16 presets) → CSS vars change live
+4. Colors → custom accent → gradient picker → `--primary-gradient` set; toolbar bg updates
+5. Colors → Background → preset + custom + gradient
+6. Colors → Skill Chip Text → auto/white/dark/custom
+7. Toolbar **▤ Layout → Presets** → Classic/Standard/Modern → columns rearrange
 8. Layout → Toggles → One Column / Show Title / Summary / Photo
 9. Layout → Custom → move chips between columns, add/remove sections
-10. Drag column divider → resizes columns (15–85%); ⇄ swaps columns
-11. Drag section handles (· · · ·) → reorders within column + cross-column
-12. Toolbar **Format** → font dropdown, spacing slider, doc size, list labels
-13. Toolbar **⚙ Config** → sliders/colors apply instantly; JSON paste; Reset
-14. Click any text → edits inline
-15. Drag project/job cards → reorder
-16. Drag bullets → reorder within card; Enter adds; Backspace-empty removes
-17. Drag skill chips → reorder (grid wrapping)
-18. Skills: type + Enter/comma to add; × to remove
-19. TechSkills: edit category + skills text; + Add Category
-20. Education/Generic: add/remove entries
-21. Header photo: click → file picker; × removes; persisted as base64
-22. Undo/Redo toolbar buttons
-23. History panel → list of entries → click any to jump
-24. Refresh → state restored from localStorage
-25. Download PDF → PDFPreviewModal → SEO keywords → iframe preview → ↓ Download
+10. Drag column divider → resizes columns; ⇄ swaps columns
+11. Drag section handles → reorders within column + cross-column
+12. Toolbar **☰ Format** → font dropdown, font size slider, spacing slider, side padding, doc size, list labels
+13. Toolbar **⚙ Settings** → sliders/colors apply instantly; JSON paste; Reset
+14. Drag project/job cards → reorder; drag bullets → reorder; Enter adds; Backspace-empty removes
+15. Drag skill chips → reorder (grid wrapping); type + Enter/comma to add; × to remove
+16. TechSkills: edit category + skills text; + Add Category
+17. Education/Generic: add/remove entries
+18. Header photo: click → file picker; × removes; persisted as base64
+19. Undo/Redo toolbar buttons; History panel → click any entry to jump
+20. Refresh → state restored from localStorage
+21. Resize window ≥ 1320px → ThemePanel + FormatPanel pin as sidebars; toolbar buttons hide
+22. **⊞ Templates** → TemplatesPage opens; select HBS Classic → one-column layout applied; ← Editor returns
+23. **⇅ Files → Export Data** → JSON copied to clipboard
+24. **⇅ Files → Import Data** → paste JSON → loads state
+25. **⇅ Files → Import File** → drop a PDF → parsed → preview → Load Resume
+26. Download PDF → PDFPreviewModal → SEO keywords → iframe preview (html2canvas) → ⬇ Download PDF → browser print dialog
