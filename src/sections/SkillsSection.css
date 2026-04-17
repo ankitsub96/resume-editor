@@ -28,11 +28,12 @@
   gap: 4px;
   background: var(--primary-gradient, var(--primary));
   color: var(--chip-text, #fff);
-  font-size: 0.7em;
-  font-weight: 600;
-  padding: 3px 9px;
+  font-size: 0.78em;
+  font-weight: 700;
+  padding: 5px 13px;
   border-radius: 3px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   white-space: nowrap;
 }
 
@@ -89,9 +90,9 @@
 .skill-chip--editing {
   background: var(--primary-gradient, var(--primary));
   color: var(--chip-text, #fff);
-  font-size: 0.7em;
-  font-weight: 600;
-  padding: 3px 9px;
+  font-size: 0.78em;
+  font-weight: 700;
+  padding: 5px 13px;
   border-radius: 3px;
   border: 1.5px solid rgba(255, 255, 255, 0.5);
   outline: none;

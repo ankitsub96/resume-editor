@@ -32,6 +32,7 @@ export default function Resume() {
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
+  const isHBS = (layout.template ?? 'novoresume') === 'hbs';
   const visibleLeft  = localSections.filter(s => s.visible !== false && s.column === 'left');
   const visibleRight = localSections.filter(s => s.visible !== false && s.column !== 'left');
   const activeSection = localSections.find(s => s.id === activeId);
@@ -93,7 +94,7 @@ export default function Resume() {
       >
         <HeaderSection />
 
-        {layout.mode === 'two-column' ? (
+        {!isHBS && layout.mode !== 'one-column' ? (
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -112,13 +113,25 @@ export default function Resume() {
             </DragOverlay>
           </DndContext>
         ) : (
-          <div className="resume-body one-column">
-            {localSections.filter(s => s.visible !== false).map(section => {
-              const reg = SECTION_REGISTRY[section.type];
-              const Renderer = RENDERERS[reg?.renderer ?? 'generic'] ?? RENDERERS.generic;
-              return <Renderer key={section.id} section={section} />;
-            })}
-          </div>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+          >
+            <SortableContext
+              items={localSections.filter(s => s.visible !== false).map(s => s.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="resume-body one-column">
+                {localSections.filter(s => s.visible !== false).map(renderSection)}
+              </div>
+            </SortableContext>
+
+            <DragOverlay dropAnimation={{ duration: 180, easing: 'ease' }}>
+              {activeSection ? <SectionGhost section={activeSection} /> : null}
+            </DragOverlay>
+          </DndContext>
         )}
 
         {format.pdfKeywords && (

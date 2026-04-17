@@ -41,6 +41,7 @@ const buildInitialState = () => ({
   canvasBackgroundOpacity: 100,
   chipTextColor: 'auto',        // 'auto' | '#xxxxxx' — auto = contrast-computed
   layout: {
+    template: 'novoresume',   // 'novoresume' | 'hbs'
     mode: 'two-column',       // 'two-column' | 'one-column'
     preset: 'standard',       // 'classic' | 'standard' | 'modern' | 'custom'
     showTitle: true,

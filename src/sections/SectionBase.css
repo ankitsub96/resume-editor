@@ -123,13 +123,13 @@
 
 .item-period {
   font-size: 0.72em;
-  color: var(--resume-text-muted, #666);
+  color: var(--resume-text, #1a1a1a);
   white-space: nowrap;
 }
 
 .item-location {
   font-size: 0.72em;
-  color: var(--resume-text-muted, #777);
+  color: var(--resume-text, #1a1a1a);
 }
 
 .item-remove-btn {

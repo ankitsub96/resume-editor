@@ -10,7 +10,7 @@ import './Toolbar.css';
 
 const PANEL_KEYS = ['themes', 'layout', 'format', 'history'];
 
-export default function Toolbar({ onDownload, pinnedPanels = false, showSidebars = true, onToggleSidebars }) {
+export default function Toolbar({ onDownload, pinnedPanels = false, showSidebars = true, onToggleSidebars, showTemplates = false, onTemplates }) {
   const { state, dispatch, canUndo, canRedo } = useResume();
   const accent = state.customAccent || 'var(--primary)';
   const [activePanel, setActivePanel] = useState(null);
@@ -69,6 +69,15 @@ export default function Toolbar({ onDownload, pinnedPanels = false, showSidebars
     <div className="toolbar" ref={toolbarRef} style={{ background: accent }}>
       <div className="toolbar-left">
         <span className="toolbar-brand">Resume Editor</span>
+        {onTemplates && (
+          <button
+            className={`toolbar-btn${showTemplates ? ' active' : ''}`}
+            onClick={onTemplates}
+            title="Browse templates"
+          >
+            {showTemplates ? '← Editor' : '⊞ Templates'}
+          </button>
+        )}
       </div>
 
       <div className="toolbar-center">

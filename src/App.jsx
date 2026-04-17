@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import Toolbar from './components/Toolbar.jsx';
 import Resume from './components/Resume.jsx';
+import TemplatesPage from './components/TemplatesPage.jsx';
 const PDFPreviewModal = lazy(() => import('./components/PDFPreviewModal.jsx'));
 import ThemePanel from './components/panels/ThemePanel.jsx';
 import FormatPanel from './components/panels/FormatPanel.jsx';
@@ -12,6 +13,7 @@ const PIN_THRESHOLD = 1320;
 
 export default function App() {
   const [showPDFPreview, setShowPDFPreview] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(false);
   const [pinned, setPinned] = useState(() => window.innerWidth >= PIN_THRESHOLD);
   const [showSidebars, setShowSidebars] = useState(true);
 
@@ -32,11 +34,19 @@ export default function App() {
         pinnedPanels={sidebarsVisible}
         showSidebars={showSidebars}
         onToggleSidebars={() => setShowSidebars(s => !s)}
+        showTemplates={showTemplates}
+        onTemplates={() => setShowTemplates(t => !t)}
       />
       <div className="app-body">
-        {sidebarsVisible && <ThemePanel pinned />}
-        <Resume />
-        {sidebarsVisible && <FormatPanel pinned />}
+        {showTemplates ? (
+          <TemplatesPage onClose={() => setShowTemplates(false)} />
+        ) : (
+          <>
+            {sidebarsVisible && <ThemePanel pinned />}
+            <Resume />
+            {sidebarsVisible && <FormatPanel pinned />}
+          </>
+        )}
       </div>
       {showPDFPreview && (
         <Suspense fallback={null}>

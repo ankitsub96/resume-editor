@@ -38,6 +38,6 @@
 }
 
 .tech-values {
-  color: var(--resume-text-muted, #444);
+  color: var(--resume-text, #1a1a1a);
   min-width: 40px;
 }
