@@ -21,8 +21,9 @@
 .tech-skill-inner {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
   font-size: 0.76em;
   line-height: var(--line-height);
 }

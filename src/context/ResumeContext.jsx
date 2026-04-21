@@ -35,23 +35,23 @@ function contrastColor(hex) {
 const buildInitialState = () => ({
   resume: initialResume,
   theme: DEFAULT_THEME,
-  customAccent: null,           // null = use theme default; '#xxxxxx' = override
+  customAccent: '#2563eb',      // null = use theme default; '#xxxxxx' = override
   customAccentOpacity: 100,
-  canvasBackground: '#ffffff',
+  canvasBackground: '#fdf8f0',
   canvasBackgroundOpacity: 100,
   chipTextColor: 'auto',        // 'auto' | '#xxxxxx' — auto = contrast-computed
   layout: {
-    template: 'novoresume',   // 'novoresume' | 'hbs'
-    mode: 'two-column',       // 'two-column' | 'one-column'
-    preset: 'standard',       // 'classic' | 'standard' | 'modern' | 'custom'
+    template: 'hbs',          // 'novoresume' | 'hbs'
+    mode: 'one-column',       // 'two-column' | 'one-column'
+    preset: 'custom',         // 'classic' | 'standard' | 'modern' | 'custom'
     showTitle: true,
     showSummary: true,
     showPhoto: true,
-    leftRatioPct: 58,         // draggable divider position (10–90)
+    leftRatioPct: 21.6,       // draggable divider position (10–90)
   },
   format: {
-    spacing: 5,               // 1-15
-    fontSize: 13,             // px, 10-18
+    spacing: 2,               // 1-15
+    fontSize: 14,             // px, 10-18
     contentPaddingH: 14,      // px, left/right padding inside columns
     documentSize: 'a4',       // 'a4' | 'letter'
     showListLabels: false,
@@ -347,7 +347,7 @@ function reducer(state, action) {
 const ResumeContext = createContext(null);
 
 const STORAGE_KEY = 'resume-editor-state';
-const STATE_VERSION = 4; // bump to invalidate old saved state
+const STATE_VERSION = 5; // bump to invalidate old saved state
 
 export function ResumeProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, null, () => {
