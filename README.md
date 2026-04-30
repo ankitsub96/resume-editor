@@ -1,5 +1,7 @@
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ankitsub96/resume-editor)
 
+> **AI Agents:** Start by reading [`repomix-output.xml`](repomix-output.xml) — it contains the full codebase snapshot in a single AI-readable file. Read that before exploring individual files.
+
 # Resume Editor
 
 An interactive, browser-based resume editor built with React + Vite.
