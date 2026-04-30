@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "/home/ubuntu/Desktop"
+    ],
+    "allow": [
+      "WebSearch"
+    ]
+  }
+}
