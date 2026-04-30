@@ -1,3 +1,5 @@
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ankitsub96/resume-editor)
+
 # Resume Editor
 
 An interactive, browser-based resume editor built with React + Vite.
