@@ -99,7 +99,12 @@
   min-width: 60px;
   width: auto;
 }
-
+@media print {
+  .skill-chip,
+  .skill-chip--editing {
+    text-shadow: none !important;
+  }
+}
 .skill-add-input {
   border: none;
   border-bottom: 1px dashed #ccc;
