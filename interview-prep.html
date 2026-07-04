@@ -26,7 +26,7 @@
   header.topbar{
     position:sticky;top:0;z-index:10;
     background:var(--bg);border-bottom:1px solid var(--border);
-    padding:.9rem 1rem;
+    padding:.5rem 1rem;
   }
   .topbar-inner{max-width:840px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;}
   .brand{
@@ -35,6 +35,7 @@
   }
   .brand .dim{color:var(--text-dim);}
   .controls{display:flex;gap:.5rem;flex-wrap:wrap;}
+  .topbar .ctrl{padding:.4rem .7rem;font-size:.8rem;min-height:32px;}
   button.ctrl{
     font-family:var(--sans);font-size:.82rem;font-weight:600;
     background:var(--bg-raised);color:var(--text);border:1px solid var(--border);
@@ -51,8 +52,8 @@
 
   #warnings{max-width:840px;margin:0.6rem auto 0;padding:0 1rem;}
   .warn-box{
-    background:#2a2013;border:1px solid var(--warn);border-radius:8px;
-    padding:.7rem .9rem;font-size:.82rem;color:#f0d9ad;
+    background:var(--bg-raised);border:1px solid var(--warn);border-radius:8px;
+    padding:.7rem .9rem;font-size:.82rem;color:var(--text);
   }
   .warn-box summary{cursor:pointer;font-weight:600;color:var(--warn);}
   .warn-box ul{margin:.5rem 0 0;padding-left:1.2rem;}
@@ -62,7 +63,7 @@
 
   
 .layout{display:flex;max-width:1400px;margin:1rem auto;padding:0 1rem;gap:1rem}
-.section-menu{width:280px;flex-shrink:0;position:sticky;top:80px;max-height:calc(100vh - 100px);overflow:auto;background:rgba(22,28,36,.85);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:16px;padding:1rem}
+.section-menu{width:280px;flex-shrink:0;position:sticky;top:110px;max-height:calc(100vh - 100px);overflow:auto;background:rgba(22,28,36,.85);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:16px;padding:1rem}
 .menu-title{font-family:var(--mono);color:var(--accent);margin-bottom:.8rem}
 .menu-item{display:block;width:100%;text-align:left;padding:.7rem;border:none;background:none;color:var(--text);border-radius:10px;cursor:pointer;margin-bottom:.35rem}
 .menu-item:hover{background:var(--bg-hover)}
@@ -114,21 +115,28 @@
   details.q-item{scroll-margin-top:90px;}
 
   .a-panel{padding:0 .9rem .9rem 2.1rem;font-size:.92rem;line-height:1.6;color:var(--text);}
-  .a-panel-top{display:flex;justify-content:flex-end;margin-bottom:.3rem;}
+  .a-panel-top{display:flex;justify-content:flex-end;align-items:center;margin-bottom:.3rem;}
+  .stars-row{display:flex;gap:.15rem;align-items:center;}
   .star-btn{
     position:relative;background:none;border:1px solid transparent;border-radius:6px;
     font-size:1.05rem;line-height:1;cursor:pointer;color:var(--text-dim);
-    padding:.25rem .5rem;transition:color .15s ease,background .15s ease,transform .1s ease,border-color .15s ease;
+    padding:.2rem .3rem;transition:color .15s ease,background .15s ease,transform .1s ease,border-color .15s ease;
   }
   .star-btn:hover{background:var(--bg-hover);border-color:var(--border);color:var(--warn);transform:scale(1.08);}
   .star-btn.is-fav{color:var(--warn);}
-  .star-btn[data-tooltip]::after{
+  .star-clear-btn{
+    position:relative;background:none;border:1px solid transparent;border-radius:6px;
+    color:var(--text-dim);font-size:.82rem;line-height:1;cursor:pointer;
+    padding:.25rem .45rem;margin-left:.35rem;
+  }
+  .star-clear-btn:hover{background:var(--bg-hover);border-color:var(--border);color:var(--warn);}
+  .star-btn[data-tooltip]::after,.star-clear-btn[data-tooltip]::after{
     content:attr(data-tooltip);position:absolute;bottom:130%;right:0;z-index:5;
     background:#000;color:#fff;font-size:.7rem;padding:.32rem .55rem;border-radius:5px;
     white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s ease;
     font-family:var(--sans);
   }
-  .star-btn[data-tooltip]:hover::after{opacity:1;}
+  .star-btn[data-tooltip]:hover::after,.star-clear-btn[data-tooltip]:hover::after{opacity:1;}
   .a-panel p{margin:.4rem 0;}
   .a-panel ul,.a-panel ol{margin:.4rem 0;padding-left:1.3rem;}
   .a-panel li{margin-bottom:.25rem;}
@@ -137,12 +145,50 @@
     padding:.1em .35em;border-radius:4px;font-size:.88em;
   }
   .a-panel pre{
-    background:#0b0e13;border:1px solid var(--border);border-radius:6px;
+    background:var(--bg-hover);border:1px solid var(--border);border-radius:6px;
     padding:.7rem .8rem;overflow-x:auto;margin:.5rem 0;
   }
   .a-panel pre code{background:none;padding:0;}
   .a-panel a{text-decoration:underline;}
   .placeholder-answer{color:var(--text-dim);font-style:italic;}
+
+  /* Favorites view: star-rating sub-groups within a section */
+  .rating-bucket{margin:.5rem 0 .9rem;}
+  .rating-bucket-label{
+    font-family:var(--mono);color:var(--warn);font-size:.8rem;
+    letter-spacing:.05em;margin:.4rem 0 .4rem;
+  }
+
+  /* Settings panel (dropdown from header) */
+  .settings-panel{
+    position:absolute;right:1rem;top:100%;margin-top:.4rem;
+    background:var(--bg-raised);border:1px solid var(--border);border-radius:10px;
+    padding:.8rem;z-index:11;min-width:240px;max-width:min(320px,92vw);
+    box-shadow:0 10px 28px rgba(0,0,0,.4);
+  }
+  .settings-panel[hidden]{display:none;}
+  .settings-panel-inner{display:flex;flex-direction:column;gap:.5rem;}
+  .settings-panel .ctrl{width:100%;text-align:left;}
+  .settings-sep{border:none;border-top:1px solid var(--border);margin:.3rem 0;}
+  .settings-import{display:flex;flex-direction:column;gap:.4rem;}
+  .settings-import textarea{
+    font-family:var(--mono);font-size:.78rem;background:var(--bg);color:var(--text);
+    border:1px solid var(--border);border-radius:6px;padding:.5rem;resize:vertical;
+  }
+
+  /* Sticky, compact toolbar (search / theme / favorites / progress) */
+  .toolbar{
+    position:sticky;top:var(--header-h,56px);z-index:9;
+    background:var(--bg);border-bottom:1px solid var(--border);
+    max-width:1400px;margin:0 auto;padding:.45rem 1rem;
+    display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;
+  }
+  .toolbar #globalSearch{
+    flex:1;min-width:180px;padding:.45rem .6rem;border-radius:6px;
+    border:1px solid var(--border);background:var(--bg-raised);color:var(--text);font-size:.85rem;
+  }
+  .toolbar .ctrl{padding:.42rem .7rem;font-size:.8rem;min-height:36px;}
+  .toolbar .progress-badge{padding:.42rem .3rem;color:var(--text-dim);font-family:var(--mono);font-size:.8rem;}
 
   @media (prefers-reduced-motion: reduce){
     .chevron{transition:none;}
@@ -153,12 +199,23 @@
 
 <header class="topbar">
   <div class="topbar-inner">
-    <span class="brand">$ study <span class="dim">python · fastapi · system-design</span></span>
+    <span class="brand">$ study</span>
     <div class="controls">
+      <button type="button" class="ctrl" id="settingsBtn">⚙ Settings</button>
+    </div>
+  </div>
+  <div id="settingsPanel" class="settings-panel" hidden>
+    <div class="settings-panel-inner">
       <button type="button" class="ctrl" id="loadFilesBtn">Load JSON files</button>
       <button type="button" class="ctrl" id="loadFolderBtn">Load folder</button>
       <input type="file" id="filePicker" accept=".json,application/json" multiple hidden>
       <input type="file" id="folderPicker" webkitdirectory hidden>
+      <hr class="settings-sep">
+      <button type="button" class="ctrl" id="copyRatingsBtn">📋 Copy ratings</button>
+      <div class="settings-import">
+        <textarea id="importRatingsInput" rows="3" placeholder="Paste exported ratings JSON here…"></textarea>
+        <button type="button" class="ctrl" id="importRatingsBtn">📥 Import ratings</button>
+      </div>
     </div>
   </div>
 </header>
@@ -166,11 +223,11 @@
 <div id="status"></div>
 <div id="warnings"></div>
 
-<div id="enhancedToolbar" style="max-width:840px;margin:1rem auto;padding:0 1rem;display:flex;gap:.5rem;flex-wrap:wrap">
-  <input id="globalSearch" placeholder="🔍 Search questions & answers (/)" style="flex:1;min-width:220px;padding:.7rem;border-radius:8px;border:1px solid #333;background:#161c24;color:#dde3ea">
+<div id="enhancedToolbar" class="toolbar">
+  <input id="globalSearch" placeholder="🔍 Search questions & answers (/)">
   <button id="themeBtn" class="ctrl">🎨 Theme</button>
   <button id="showFavBtn" class="ctrl">⭐ Favorites</button>
-  <span id="progressBadge" style="padding:.7rem;color:#8893a1;font-family:monospace"></span>
+  <span id="progressBadge" class="progress-badge"></span>
 </div>
 
 <div class="layout"><aside id="sectionMenu" class="section-menu"></aside><main id="content"></main></div>
@@ -364,33 +421,134 @@ if(__exports != exports)module.exports = exports;return module.exports}));
     try { return JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) { return {}; }
   }
 
-  function setStarVisual(starBtn, isFav) {
-    starBtn.textContent = isFav ? "★" : "☆";
-    starBtn.classList.toggle("is-fav", isFav);
-    var label = isFav ? "Remove from favorites" : "Add to favorites";
-    starBtn.setAttribute("aria-label", label);
-    starBtn.setAttribute("data-tooltip", label);
+  // Content-based qid: section + question text, normalized and slugified.
+  // Human-readable and stable across reorders/reloads, as long as the
+  // section name + question text match (see makeQid below).
+  function slugify(s) {
+    return String(s || "")
+      .trim()
+      .replace(/\s+/g, " ")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "")
+      .slice(0, 80);
+  }
+  function makeQid(section, question) {
+    return slugify(section) + "__" + slugify(question);
   }
 
-  // Wires a single rendered question: favorite star (top of the answer panel)
-  // and open/close tracking (per-section last-open question + progress).
-  function wireQuestionItem(details, starBtn) {
+  // Ratings are stored under the existing "favorites" localStorage key,
+  // now shaped as { qid: rating(1-5) } instead of a flat array of qids.
+  function getRatings() { return getMapLS("favorites"); }
+  function setRatings(map) { localStorage.setItem("favorites", JSON.stringify(map)); }
+  function getRating(qid) { return getRatings()[qid] || 0; }
+  function setRating(qid, val) {
+    var map = getRatings();
+    if (val > 0) { map[qid] = val; } else { delete map[qid]; }
+    setRatings(map);
+  }
+
+  // One-time migration: positional qids (section__q3) -> content-based qids,
+  // and legacy favorites array-of-strings -> {qid: rating} map.
+  // Runs once (guarded by a localStorage flag) against whatever entries are
+  // loaded on the first render call — typically the build-time embedded data,
+  // which is what any existing localStorage state would correspond to.
+  // Anything that can't be mapped to a current entry is dropped, never thrown.
+  function migrateQidsAndRatings(entries) {
+    if (localStorage.getItem("qidMigrationV2Done")) return;
+    try {
+      var grouped = groupBySection(entries);
+      var oldToNew = {};
+      grouped.forEach(function (group) {
+        var sectionId = "section-" + group.displayName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        group.items.forEach(function (item, idx) {
+          oldToNew[sectionId + "__q" + (idx + 1)] = makeQid(item.section, item.question);
+        });
+      });
+
+      // favorites: legacy array of qid strings -> {qid: 1}; already-a-map is remapped by key.
+      var rawFav = localStorage.getItem("favorites");
+      if (rawFav) {
+        var parsedFav = null;
+        try { parsedFav = JSON.parse(rawFav); } catch (e) { parsedFav = null; }
+        if (Array.isArray(parsedFav)) {
+          var favMap = {};
+          parsedFav.forEach(function (oldQid) {
+            var newQid = oldToNew[oldQid];
+            if (newQid) favMap[newQid] = 1;
+          });
+          localStorage.setItem("favorites", JSON.stringify(favMap));
+        } else if (parsedFav && typeof parsedFav === "object") {
+          var remappedFav = {};
+          Object.keys(parsedFav).forEach(function (oldQid) {
+            var newQid = oldToNew[oldQid];
+            if (newQid) remappedFav[newQid] = parsedFav[oldQid];
+          });
+          localStorage.setItem("favorites", JSON.stringify(remappedFav));
+        }
+      }
+
+      // doneQuestions: flat array of qids.
+      var done = getJSONLS("doneQuestions");
+      if (Array.isArray(done)) {
+        var remappedDone = done.map(function (q) { return oldToNew[q]; }).filter(Boolean);
+        localStorage.setItem("doneQuestions", JSON.stringify(remappedDone));
+      }
+
+      // lastOpenBySection: sectionId (unchanged) -> qid (needs remap).
+      var lastOpen = getMapLS("lastOpenBySection");
+      var remappedLastOpen = {};
+      Object.keys(lastOpen).forEach(function (sectionId) {
+        var newQid = oldToNew[lastOpen[sectionId]];
+        if (newQid) remappedLastOpen[sectionId] = newQid;
+      });
+      localStorage.setItem("lastOpenBySection", JSON.stringify(remappedLastOpen));
+    } catch (e) {
+      // Never let migration issues crash the app — worst case, old data is left as-is.
+    }
+    localStorage.setItem("qidMigrationV2Done", "1");
+  }
+
+  function setStarsVisual(starsRow, rating) {
+    starsRow.querySelectorAll(".star-btn").forEach(function (btn) {
+      var v = +btn.dataset.val;
+      var filled = v <= rating;
+      btn.classList.toggle("is-fav", filled);
+      var label = "Rate " + v + " star" + (v > 1 ? "s" : "");
+      btn.setAttribute("aria-label", label);
+      btn.setAttribute("data-tooltip", label);
+    });
+  }
+
+  // Wires a single rendered question: 5-star rating row + clear button
+  // (top of the answer panel), and open/close tracking (per-section
+  // last-open question + progress).
+  function wireQuestionItem(details, starsRow, clearBtn) {
     var qid = details.dataset.qid;
 
-    setStarVisual(starBtn, getJSONLS("favorites").indexOf(qid) !== -1);
+    setStarsVisual(starsRow, getRating(qid));
 
-    starBtn.addEventListener("click", function (e) {
+    starsRow.querySelectorAll(".star-btn").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var val = +btn.dataset.val;
+        setRating(qid, val);
+        setStarsVisual(starsRow, val);
+        if (document.body.classList.contains("favorites-mode") && window.__refreshFavoritesView) {
+          window.__refreshFavoritesView();
+        }
+      });
+    });
+
+    clearBtn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      var arr = getJSONLS("favorites");
-      var pos = arr.indexOf(qid);
-      var nowFav;
-      if (pos !== -1) { arr.splice(pos, 1); nowFav = false; }
-      else { arr.push(qid); nowFav = true; }
-      localStorage.setItem("favorites", JSON.stringify(arr));
-      setStarVisual(starBtn, nowFav);
-      if (!nowFav && document.body.classList.contains("favorites-mode")) {
-        details.style.display = "none";
+      setRating(qid, 0);
+      setStarsVisual(starsRow, 0);
+      if (document.body.classList.contains("favorites-mode")) {
+        if (window.__refreshFavoritesView) window.__refreshFavoritesView();
+        else details.style.display = "none";
       }
     });
 
@@ -472,6 +630,7 @@ if(__exports != exports)module.exports = exports;return module.exports}));
         document.body.classList.remove('favorites-mode');
         var favBtn=document.getElementById('showFavBtn');
         if(favBtn) favBtn.classList.remove('active');
+        if (window.__restoreFavoritesOrder) window.__restoreFavoritesOrder();
         document.querySelectorAll('details.q-item').forEach(function(o){
           o.style.display='';
         });
@@ -513,6 +672,8 @@ if(__exports != exports)module.exports = exports;return module.exports}));
     setStatus(entries.length + " question(s) loaded" + (sourceLabel ? " — " + sourceLabel : "") +
       (warnings && warnings.length ? " (" + warnings.length + " skipped)" : ""));
 
+    migrateQidsAndRatings(entries);
+
     var grouped = groupBySection(entries);
     renderSectionMenu(grouped);
     grouped.forEach(function (group) {
@@ -529,7 +690,11 @@ if(__exports != exports)module.exports = exports;return module.exports}));
       group.items.forEach(function (item, idx) {
         var details = document.createElement("details");
         details.className = "q-item";
-        details.dataset.qid = section.id + "__q" + (idx + 1);
+        details.dataset.qid = makeQid(item.section, item.question);
+        // Original in-section question number — used to restore order and
+        // to keep showing the right number when this item is viewed inside
+        // the Favorites view's star-rating sub-groups.
+        details.dataset.qnum = idx + 1;
 
         var summary = document.createElement("summary");
         summary.className = "q-row";
@@ -546,10 +711,24 @@ if(__exports != exports)module.exports = exports;return module.exports}));
 
         var panelTop = document.createElement("div");
         panelTop.className = "a-panel-top";
-        var starBtn = document.createElement("button");
-        starBtn.type = "button";
-        starBtn.className = "star-btn";
-        panelTop.appendChild(starBtn);
+        var starsRow = document.createElement("div");
+        starsRow.className = "stars-row";
+        for (var s = 1; s <= 5; s++) {
+          var starBtn = document.createElement("button");
+          starBtn.type = "button";
+          starBtn.className = "star-btn";
+          starBtn.dataset.val = s;
+          starBtn.textContent = "★";
+          starsRow.appendChild(starBtn);
+        }
+        var clearBtn = document.createElement("button");
+        clearBtn.type = "button";
+        clearBtn.className = "star-clear-btn";
+        clearBtn.textContent = "✕";
+        clearBtn.setAttribute("aria-label", "Clear rating");
+        clearBtn.setAttribute("data-tooltip", "Clear rating");
+        panelTop.appendChild(starsRow);
+        panelTop.appendChild(clearBtn);
         panel.appendChild(panelTop);
 
         var body = document.createElement("div");
@@ -565,7 +744,7 @@ if(__exports != exports)module.exports = exports;return module.exports}));
 
         section.appendChild(details);
 
-        wireQuestionItem(details, starBtn);
+        wireQuestionItem(details, starsRow, clearBtn);
       });
 
       contentEl.appendChild(section);
@@ -638,24 +817,36 @@ if(__exports != exports)module.exports = exports;return module.exports}));
 
 <script>
 (function(){
+// Full 9-variable palette per theme (bg, raised, hover, border, text, textDim,
+// accent, accentDim, warn) so applyTheme() no longer leaves --accent-dim,
+// --border, --text, --text-dim, --warn stuck on the default (Noir) values.
+// Arctic (and any future light theme) gets dark text/border values so
+// contrast holds up against its light background.
 const themes=[
-{name:'Noir',bg:'#10141a',raised:'#161c24',accent:'#8fbf7f'},
-{name:'Arctic',bg:'#f5f7fb',raised:'#ffffff',accent:'#3b82f6'},
-{name:'Dracula',bg:'#282a36',raised:'#343746',accent:'#bd93f9'},
-{name:'Nord',bg:'#2e3440',raised:'#3b4252',accent:'#88c0d0'},
-{name:'Tokyo',bg:'#1a1b26',raised:'#24283b',accent:'#7aa2f7'},
-{name:'Gruvbox',bg:'#282828',raised:'#3c3836',accent:'#fabd2f'},
-{name:'Emerald',bg:'#0f172a',raised:'#1e293b',accent:'#10b981'},
-{name:'Solarized',bg:'#002b36',raised:'#073642',accent:'#2aa198'},
-{name:'Catppuccin',bg:'#1e1e2e',raised:'#313244',accent:'#f5c2e7'},
-{name:'Cyberpunk',bg:'#0d0221',raised:'#1a1040',accent:'#ff00ff'}
+{name:'Noir',bg:'#10141a',raised:'#161c24',hover:'#1d242e',border:'#262e39',text:'#dde3ea',textDim:'#8893a1',accent:'#8fbf7f',accentDim:'#5f8a52',warn:'#e8a14b'},
+{name:'Arctic',bg:'#f5f7fb',raised:'#ffffff',hover:'#e9edf5',border:'#d5dbe6',text:'#1e293b',textDim:'#5b6472',accent:'#3b82f6',accentDim:'#2563eb',warn:'#c2790a'},
+{name:'Dracula',bg:'#282a36',raised:'#343746',hover:'#3d4058',border:'#44475a',text:'#f8f8f2',textDim:'#a9abc3',accent:'#bd93f9',accentDim:'#9580c9',warn:'#ffb86c'},
+{name:'Nord',bg:'#2e3440',raised:'#3b4252',hover:'#434c5e',border:'#4c566a',text:'#eceff4',textDim:'#9aa5b1',accent:'#88c0d0',accentDim:'#6a9fb0',warn:'#ebcb8b'},
+{name:'Tokyo',bg:'#1a1b26',raised:'#24283b',hover:'#2f334d',border:'#3b3f58',text:'#c0caf5',textDim:'#7982a9',accent:'#7aa2f7',accentDim:'#5a7fd4',warn:'#e0af68'},
+{name:'Gruvbox',bg:'#282828',raised:'#3c3836',hover:'#484341',border:'#504945',text:'#ebdbb2',textDim:'#a89984',accent:'#fabd2f',accentDim:'#d79921',warn:'#fe8019'},
+{name:'Emerald',bg:'#0f172a',raised:'#1e293b',hover:'#263548',border:'#334155',text:'#e2e8f0',textDim:'#94a3b8',accent:'#10b981',accentDim:'#0d9668',warn:'#f59e0b'},
+{name:'Solarized',bg:'#002b36',raised:'#073642',hover:'#0d4652',border:'#155a67',text:'#eee8d5',textDim:'#93a1a1',accent:'#2aa198',accentDim:'#1f7a73',warn:'#cb4b16'},
+{name:'Catppuccin',bg:'#1e1e2e',raised:'#313244',hover:'#3a3d57',border:'#45475a',text:'#cdd6f4',textDim:'#a6adc8',accent:'#f5c2e7',accentDim:'#d19bc4',warn:'#fab387'},
+{name:'Cyberpunk',bg:'#0d0221',raised:'#1a1040',hover:'#241456',border:'#3a1f6b',text:'#f0e6ff',textDim:'#b09fd6',accent:'#ff00ff',accentDim:'#c400c4',warn:'#ffcc00'}
 ];
 let themeIndex=+localStorage.getItem('themeIndex')||0;
 function applyTheme(){
  const t=themes[themeIndex];
- document.documentElement.style.setProperty('--bg',t.bg);
- document.documentElement.style.setProperty('--bg-raised',t.raised);
- document.documentElement.style.setProperty('--accent',t.accent);
+ const root=document.documentElement.style;
+ root.setProperty('--bg',t.bg);
+ root.setProperty('--bg-raised',t.raised);
+ root.setProperty('--bg-hover',t.hover);
+ root.setProperty('--border',t.border);
+ root.setProperty('--text',t.text);
+ root.setProperty('--text-dim',t.textDim);
+ root.setProperty('--accent',t.accent);
+ root.setProperty('--accent-dim',t.accentDim);
+ root.setProperty('--warn',t.warn);
 }
 applyTheme();
 
@@ -664,6 +855,16 @@ document.getElementById('themeBtn').onclick=function(){
  localStorage.setItem('themeIndex',themeIndex);
  applyTheme();
 };
+
+// Keeps the sticky toolbar pinned directly below the sticky header,
+// whatever the header's actual rendered height is (it can change if the
+// brand text wraps on narrow screens).
+function setHeaderHeightVar(){
+ const header=document.querySelector('header.topbar');
+ if(header) document.documentElement.style.setProperty('--header-h', header.offsetHeight+'px');
+}
+setHeaderHeightVar();
+window.addEventListener('resize', setHeaderHeightVar);
 
 function updateProgress(){
  const total=document.querySelectorAll('details.q-item').length;
@@ -681,6 +882,60 @@ document.getElementById('globalSearch').addEventListener('input',function(e){
  });
 });
 
+// ---- Favorites view: section-first, then star-rating sub-groups (5..1) ----
+
+// Undoes the rating-bucket DOM regrouping, putting every question back
+// directly under its section in original order. Safe to call even if
+// favorites view was never entered (no-op per section in that case).
+function restoreFavoritesOrder(){
+ document.querySelectorAll('.section').forEach(function(sec){
+   const buckets=[...sec.querySelectorAll('.rating-bucket')];
+   if(buckets.length===0) return;
+   const items=[...sec.querySelectorAll('details.q-item')]
+     .sort((a,b)=>(+a.dataset.qnum)-(+b.dataset.qnum));
+   items.forEach(d=>{ d.style.display=''; sec.appendChild(d); });
+   buckets.forEach(b=>b.remove());
+ });
+}
+
+function buildFavoritesView(){
+ const ratings=JSON.parse(localStorage.getItem('favorites')||'{}');
+
+ document.querySelectorAll('.section').forEach(function(sec){
+   let anyVisible=false;
+   const items=[...sec.querySelectorAll(':scope > details.q-item')];
+
+   for(let r=5;r>=1;r--){
+     const bucketItems=items.filter(d=>(ratings[d.dataset.qid]||0)===r);
+     if(bucketItems.length===0) continue;
+     anyVisible=true;
+     const bucket=document.createElement('div');
+     bucket.className='rating-bucket';
+     const label=document.createElement('div');
+     label.className='rating-bucket-label';
+     label.textContent='★'.repeat(r)+'☆'.repeat(5-r);
+     bucket.appendChild(label);
+     bucketItems.forEach(d=>{ d.style.display=''; bucket.appendChild(d); });
+     sec.appendChild(bucket);
+   }
+
+   items.forEach(d=>{
+     if((ratings[d.dataset.qid]||0)===0) d.style.display='none';
+   });
+
+   sec.style.display=anyVisible?'':'none';
+ });
+}
+
+// Rebuilds the favorites view in place (e.g. after a rating changes while
+// already viewing favorites) by restoring order first, then re-bucketing.
+function rebuildFavoritesView(){
+ restoreFavoritesOrder();
+ buildFavoritesView();
+}
+window.__restoreFavoritesOrder=restoreFavoritesOrder;
+window.__refreshFavoritesView=rebuildFavoritesView;
+
 document.getElementById('showFavBtn').onclick=function(){
  const btn=this;
  const active=document.body.classList.contains('favorites-mode');
@@ -689,21 +944,11 @@ document.getElementById('showFavBtn').onclick=function(){
    document.body.classList.add('favorites-mode');
    btn.classList.add('active');
    document.querySelectorAll('.menu-item').forEach(x=>x.classList.remove('active'));
-
-   const favs=JSON.parse(localStorage.getItem('favorites')||'[]');
-   document.querySelectorAll('.section').forEach(function(sec){
-     let anyVisible=false;
-     sec.querySelectorAll('details.q-item').forEach(function(d){
-       const isFav=favs.includes(d.dataset.qid);
-       d.style.display=isFav?'':'none';
-       if(isFav) anyVisible=true;
-     });
-     sec.style.display=anyVisible?'':'none';
-   });
+   buildFavoritesView();
  } else {
    document.body.classList.remove('favorites-mode');
    btn.classList.remove('active');
-
+   restoreFavoritesOrder();
    document.querySelectorAll('details.q-item').forEach(d=>{ d.style.display=''; });
 
    const savedId=localStorage.getItem('lastSection');
@@ -712,6 +957,96 @@ document.getElementById('showFavBtn').onclick=function(){
    if(target) target.click();
  }
 };
+
+// ---- Settings panel: load buttons + copy/import ratings ----
+
+const settingsBtn=document.getElementById('settingsBtn');
+const settingsPanel=document.getElementById('settingsPanel');
+settingsBtn.addEventListener('click',function(e){
+ e.stopPropagation();
+ settingsPanel.hidden=!settingsPanel.hidden;
+});
+document.addEventListener('click',function(e){
+ if(!settingsPanel.hidden && !settingsPanel.contains(e.target) && e.target!==settingsBtn){
+   settingsPanel.hidden=true;
+ }
+});
+
+function showRatingsWarning(msg){
+ const warningsEl=document.getElementById('warnings');
+ const box=document.createElement('details');
+ box.className='warn-box';
+ box.open=true;
+ const summary=document.createElement('summary');
+ summary.textContent='Ratings — 1 issue';
+ box.appendChild(summary);
+ const ul=document.createElement('ul');
+ const li=document.createElement('li');
+ li.textContent=msg;
+ ul.appendChild(li);
+ box.appendChild(ul);
+ warningsEl.innerHTML='';
+ warningsEl.appendChild(box);
+}
+
+document.getElementById('copyRatingsBtn').addEventListener('click',function(){
+ const btn=this;
+ const data=localStorage.getItem('favorites')||'{}';
+ navigator.clipboard.writeText(data).then(function(){
+   const original=btn.textContent;
+   btn.textContent='✅ Copied!';
+   setTimeout(()=>{ btn.textContent=original; },1500);
+ }).catch(function(){
+   showRatingsWarning('Could not copy to clipboard — your browser may be blocking clipboard access on this page.');
+ });
+});
+
+document.getElementById('importRatingsBtn').addEventListener('click',function(){
+ const input=document.getElementById('importRatingsInput');
+ const normalized=input.value.trim().replace(/\s+/g,' ');
+ let parsed;
+ try{
+   parsed=JSON.parse(normalized);
+ }catch(e){
+   showRatingsWarning('Pasted text is not valid JSON — import cancelled.');
+   return;
+ }
+ if(!parsed || typeof parsed!=='object' || Array.isArray(parsed)){
+   showRatingsWarning('Pasted JSON must be an object of {question-id: rating} pairs — import cancelled.');
+   return;
+ }
+
+ const current=JSON.parse(localStorage.getItem('favorites')||'{}');
+ const merged=Object.assign({},current);
+ let importedCount=0;
+ Object.keys(parsed).forEach(function(k){
+   const v=parsed[k];
+   if(typeof v==='number' && v>=1 && v<=5){
+     merged[k]=v;
+     importedCount++;
+   }
+ });
+
+ if(importedCount===0){
+   showRatingsWarning('No valid ratings (1–5) found in the pasted JSON — nothing imported.');
+   return;
+ }
+
+ localStorage.setItem('favorites',JSON.stringify(merged));
+ input.value='';
+
+ document.querySelectorAll('details.q-item').forEach(function(d){
+   const starsRow=d.querySelector('.stars-row');
+   if(!starsRow) return;
+   const rating=merged[d.dataset.qid]||0;
+   starsRow.querySelectorAll('.star-btn').forEach(function(btn){
+     btn.classList.toggle('is-fav', (+btn.dataset.val)<=rating);
+   });
+ });
+
+ if(document.body.classList.contains('favorites-mode')) rebuildFavoritesView();
+ settingsPanel.hidden=true;
+});
 
 document.addEventListener('keydown',function(e){
  if(e.key==='/' && document.activeElement.id!=='globalSearch'){
@@ -723,8 +1058,22 @@ document.addEventListener('keydown',function(e){
  if(e.key==='j' && current<qs.length-1){qs[current+1].open=true;qs[current+1].scrollIntoView({behavior:'smooth'});}
  if(e.key==='k' && current>0){qs[current-1].open=true;qs[current-1].scrollIntoView({behavior:'smooth'});}
  if(e.key==='f' && current>=0){
-   const s=qs[current].querySelector('.star-btn');
-   if(s) s.click();
+   // Quick favorite toggle: rate 5 if currently unrated, otherwise clear.
+   const qitem=qs[current];
+   const qid=qitem.dataset.qid;
+   const ratings=JSON.parse(localStorage.getItem('favorites')||'{}');
+   const curRating=ratings[qid]||0;
+   let newRating;
+   if(curRating>0){ delete ratings[qid]; newRating=0; }
+   else { ratings[qid]=5; newRating=5; }
+   localStorage.setItem('favorites',JSON.stringify(ratings));
+   const starsRow=qitem.querySelector('.stars-row');
+   if(starsRow){
+     starsRow.querySelectorAll('.star-btn').forEach(function(btn){
+       btn.classList.toggle('is-fav', (+btn.dataset.val)<=newRating);
+     });
+   }
+   if(document.body.classList.contains('favorites-mode')) rebuildFavoritesView();
  }
 });
 })();
