@@ -8,6 +8,8 @@
   position: relative;
   z-index: 100;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  overflow: auto;
+  scrollbar-width: none;
 }
 
 .toolbar-brand {
@@ -27,6 +29,12 @@
 .toolbar-left {
   display: flex;
   align-items: stretch;
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 0; /* Sticks exactly to the left edge */
+  background-color: var(--primary);
+  filter: brightness(1.1); /* 20% lighter */
+  z-index: 10;
 }
 
 .toolbar-center {
