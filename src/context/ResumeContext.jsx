@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
-import { initialResume } from '../data/initialData.js';
+import { initialResume,keywords } from '../data/initialData.js';
 import { THEMES, DEFAULT_THEME, applyTheme } from '../themes/themes.js';
 import { SECTION_REGISTRY } from '../sections/sectionRegistry.js';
 import { nanoid } from '../utils/nanoid.js';
@@ -51,12 +51,12 @@ const buildInitialState = () => ({
   },
   format: {
     spacing: 2,               // 1-15
-    fontSize: 14,             // px, 10-18
-    contentPaddingH: 14,      // px, left/right padding inside columns
+    fontSize: 11,             // px, 10-18
+    contentPaddingH: 11,      // px, left/right padding inside columns
     documentSize: 'a4',       // 'a4' | 'letter'
     showListLabels: false,
     font: 'Inter',
-    pdfKeywords: '',          // embedded in PDF metadata, not visible in output
+    pdfKeywords: keywords||'',          // embedded in PDF metadata, not visible in output
   },
   history: [],
   historyIndex: -1,
