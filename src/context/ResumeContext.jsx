@@ -35,7 +35,7 @@ function contrastColor(hex) {
 const buildInitialState = () => ({
   resume: initialResume,
   theme: DEFAULT_THEME,
-  customAccent: '#2563eb',      // null = use theme default; '#xxxxxx' = override
+  customAccent: '#0284c7',      // null = use theme default; '#xxxxxx' = override
   customAccentOpacity: 100,
   canvasBackground: '#fdf8f0',
   canvasBackgroundOpacity: 100,
