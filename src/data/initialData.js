@@ -52,7 +52,7 @@
             id: "tech-1",
             category: "Web Development",
             skills:
-              "JavaScript, TypeScript, Python, ReactJS, Redux, Context API, NextJS, Vite, Node.js, ExpressJS, FastAPI",
+              "NodeJs, JavaScript, TypeScript, Python, ReactJS, Redux, Context API, NextJS, Vite, Node.js, ExpressJS, FastAPI",
           },
           {
             id: "tech-1.5",
