@@ -108,9 +108,9 @@
 
 /* ── Files panel ──────────────────────────────────── */
 .files-panel {
-  position: absolute;
-  top: calc(100% + 4px);
-  right: 0;
+  position: fixed;
+  top: 52px;
+  right: 165px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 6px 24px rgba(0,0,0,0.18);

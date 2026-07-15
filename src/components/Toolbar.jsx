@@ -23,6 +23,7 @@ export default function Toolbar({ onDownload, pinnedPanels = false, showSidebars
   const toolbarRef = useRef(null);
 
   function togglePanel(key) {
+    console.log("togglePanel::",{key})
     setActivePanel((cur) => (cur === key ? null : key));
   }
 
